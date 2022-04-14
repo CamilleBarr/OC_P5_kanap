@@ -20,33 +20,33 @@ fetch('http://localhost:3000/api/products')
     
     }
     
-    // //Function pour ajouter dans le DOM un lien
-    // .then(function(addElt) {
-    //     const Link = document.createElement('<a>');
-    //     Link.appendChild('section.items');
+    // //Constance pour ajouter dans le DOM un lien
+    // 
+    //     const a = document.createElement('<a>');
+    //     .appendChild('link');
     
-    //     let img = document.createElement('<img>');
-    //     img.appendChild(article);
+    //     const img = document.createElement('<img>');
+    //     article.appendChild(img);
     
     
     //     //Function pour créer l'enfant article dans la balise lien
-    //     let article = document.createElement('<article>');
+    //     const article = document.createElement('<article>');
     //     article.appendChild(newLink);
 
     //     //Function pour créer les enfants "img" "productName"dans balise h3 "productDescription" dans balise p
 
 
-    //     let h3 = document.createElement('<h3>');
-    //     img.appendChild(article);
+    //     const h3 = document.createElement('<h3>');
+    //     article.appendChild(h3);
 
     //     let productName = document.createClass('productName')
-    //     productName.appendChild(h3)
+    //     h3.appendChild(productName)
 
-    //     let p = document.createElement('<p>');
-    //     img.appendChild(article);
+    //     const p = document.createElement('<p>');
+    //     article.appendChild(p);
 
-    //     let productDescription = document.createClass('productDescription')
-    //     productDescription.appendChild(p)
+    //     const productDescription = document.createClass('productDescription')
+    //     p.appendChild(productDescription)
 
     //     //retrouver les éléments qui correspondent aux contenus à afficher
     //     let elt = document.getElementById('items')
