@@ -14,135 +14,31 @@ fetch('http://localhost:3000/api/products')
     for (let product of products){ // je créé une boucle qui dit que chaque Items/objects/product dans le tableau/webapi products 
         
         console.log (product) // on vérifie d'abord que les items/objects/product ooient bien récupérés
-        
-        // création des éléments HTML 
-
-            //1. lien du produit / Card
-
-            let linkElt = document.createElement("a");
-
-            sectionElt.appendChild(linkElt);
-
-            // 2. article
-            let articleElt = document.createElement('article');
-
-            linkElt.appendChild(articleElt);
-
-            //3. img
-            let imageElt = document.createElement('img');
-
-            articleElt.appendChild(imageElt);
-            imageElt.classList.add('imageUrl')
-            //4. h3 et creation de class
-            let h3Elt = document.createElement('h3');
-
-            h3Elt.innerHTML = product.name
-
-            articleElt.appendChild(h3Elt);
-            h3Elt.classList.add('name');
-
-            //5. p et creation de class
-            let pElt = document.createElement('p');
-
-            articleElt.appendChild(pElt);
-            pElt.classList.add('altText');
-
+            // création des éléments HTML 
+                //1. lien du produit / Card
+        let linkElt = document.createElement("a"); // on créé la variable qui correspondra à l'élément du HTML
+        sectionElt.appendChild(linkElt); // on intègre la variable en tant qu'enfant du parent "section id items" dans HTML
+                // 2. article
+        let articleElt = document.createElement('article'); // on créé la variable qui correspondra à l'élément du HTML
+        linkElt.appendChild(articleElt);// on intègre la variable en tant qu'enfant du parent "a " dans HTML
+                //3. img
+            // on créé la variable qui correspondra à l'élément du HTML
+        let imageElt = document.createElement('img'); 
+        imageElt.src = product.imageUrl;
+        articleElt.appendChild(imageElt); // on intègre la variable en tant qu'enfant du parent "article" dans HTML
+                //4. h3 et creation de class
+        let h3Elt = document.createElement('h3'); // on créé la variable qui correspondra à l'élément du HTML
+        h3Elt.innerHTML = product.name; // on va chercher la clé de l'item/object/product que l'on souhaite voir apparaitre
+        articleElt.appendChild(h3Elt); // on intègre la variable en tant qu'enfant du parent "article" dans HTML
+                //5. p et creation de class
+        let pElt = document.createElement('p'); // on créé la variable qui correspondra à l'élément du HTML
+        pElt.innerHTML = product.altTxt; // on va chercher la clé de l'item/object/product que l'on souhaite voir apparaitre
+        articleElt.appendChild(pElt); // on intègre la variable en tant qu'enfant du parent "article" dans HTML
     };
 })
 .catch(function(err)
 {
 })
-
-// récupération du contenu du tableau
-
-/*let products=['object1','object2']
-console.log(products[0]);
-console.log(products[1]);
-//n'affiche rien, juste les creation d'élément, base d'une card
-*/
-/*
-const products = 8;
-
-for (let i=0; i<10; i++);
-//console.log(products);
-//affiche qu'une card vierge*/
-
-/*
-let products = []
-
-
-}
-*/
-/*
-let products = [ object2];
-for (let i in products){
-console.log (products [i]);
-}
-// affiche une card vierge et dans la console affiche 1 et 2.
-*/
-/*
-let products = ['object'[1], 'object'[2]];
-for (let i in products){
-console.log (products [i]);
-}
-// s'affiche une card vierge et dans la console on voit b et j.
-*/
-
-/*const product = [
-    {imageUrl
-    }
-    
-]*/
-
-/*for (let products of product) {
-     console.log([]);
- }
- */
-
-/*let products=["index[1]", "index[2]"];
-let allProducts=products.length;
-*/
-
-// il faut associer altText au paragraphe, associer name à h3 et associer imageUrl 
-
-/*    let products = 8;
-for (let i = 0; i < products; i++) {
-   console.log(items[i]);
-}    
-//Csq 9 messages
-*/
-/*
-products = []
-for (let i in products) {
-console.log(products[i]);
-}
-*/
-
-//elementList = parentNode.querySelectorAll('imageUrl','name', 'altText');
-
-
-//let products = document.getElementsByArray(products);
-
-/*
-const firstItem = products[0];
-const secondtItem = products[1];
-const thirdItem = products[2];
-const fourthItem = products[3];
-const fifthItem = products[4];
-const sixthItem = products[5];
-const seventhItem = products[6];
-const eighthItem = products[7];
-*/
-
-// Csq 11 message
-/*  const numberOfProductByPage = 9;
-for (let i = 0; i < numberOfProductByPage; i++) {
-   console.log(items[i]);
-}
-// Csq rien
-*/   
-
-
 
 
 
