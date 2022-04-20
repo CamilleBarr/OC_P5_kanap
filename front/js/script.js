@@ -1,75 +1,77 @@
-const products = []
-
-
-
-
-
-
-// récupération du json pour la page d'accueil:
 fetch('http://localhost:3000/api/products')
-
-    //Function "res" permet d'assurer la bonne récupération du fichier:
-    .then(function(res)
-    {
-        if (res.ok) {
-            return res.json();
-        }
-        function value (){
-        console.log (products[items[1], items[2], items[3],items[4], items[5], items[6], items[7], items[8]])
-        }
-    
+//Function "res" permet d'assurer la bonne récupération du fichier:
+.then(function(res){        
+    if (res.ok){
+        return res.json()
     }
+})
+.then(function(products){ // j'appelle le tableau et récupère les données du tableau
     
-    // //Constance pour ajouter dans le DOM un lien
-    // 
-    //     const a = document.createElement('<a>');
-    //     .appendChild('link');
+    console.log (products); // je vérifie que le tableau est bien intégré
     
-    //     const img = document.createElement('<img>');
-    //     article.appendChild(img);
-    
-    
-    //     //Function pour créer l'enfant article dans la balise lien
-    //     const article = document.createElement('<article>');
-    //     article.appendChild(newLink);
+    const sectionElt = document.getElementById("items"); // la constance correspondra dans le HTML à la section dont l'ID est items
+                // je créé une boucle qui dit que chaque Items/objects/product dans le tableau/webapi products 
+    for (let product of products){ 
+                // on vérifie d'abord que les items/objects/product ooient bien récupérés
+        console.log (product) 
+                // création des éléments HTML 
+                //1. lien du produit / Card
+                // on créé la variable qui correspondra à l'élément du HTML
+        let linkElt = document.createElement("a"); 
+        //linkElt = product._Id;
+        linkkElt = URL.searchParams;
+        let params = (new URL(document.location)).searchParams;
+        let productId = params.get('_Id'); // is the string to the ID".
+                // on intègre la variable en tant qu'enfant du parent "section id items" dans HTML
+        sectionElt.appendChild(linkElt); 
+                // 2. article
+                // on créé la variable qui correspondra à l'élément du HTML
+        let articleElt = document.createElement('article'); 
 
-    //     //Function pour créer les enfants "img" "productName"dans balise h3 "productDescription" dans balise p
+        // err, articleElt.innerHTML = product._id;
+                // on intègre la variable en tant qu'enfant du parent "a " dans HTML
+        linkElt.appendChild(articleElt);
+                //3. img
+                // on créé la variable qui correspondra à l'élément du HTML
+        let imageElt = document.createElement('img');
+                // on récupère la valeur dans le json à afficher 
+        imageElt.src = product.imageUrl;
+        imageElt.alt = product.name;
+                // on intègre la variable en tant qu'enfant du parent "article" dans HTML
+        articleElt.appendChild(imageElt); 
+                //4. h3 et creation de class
+                // on créé la variable qui correspondra à l'élément du HTML
+        let h3Elt = document.createElement('h3'); 
+                // on va chercher la clé de l'item/object/product que l'on souhaite voir apparaitre
+        h3Elt.innerHTML = product.name;
+                // on intègre la variable en tant qu'enfant du parent "article" dans HTML 
+        articleElt.appendChild(h3Elt); 
+                //5. p et creation de class
+                // on créé la variable qui correspondra à l'élément du HTML
+        let pElt = document.createElement('p');
+                // on va chercher la clé de l'item/object/product que l'on souhaite voir apparaitre 
+        pElt.innerHTML = product.altTxt;
+                 // on intègre la variable en tant qu'enfant du parent "article" dans HTML 
+        articleElt.appendChild(pElt); 
+    };
+})
+.catch(function(err)
+{
+})
 
 
-    //     const h3 = document.createElement('<h3>');
-    //     article.appendChild(h3);
 
-    //     let productName = document.createClass('productName')
-    //     h3.appendChild(productName)
-
-    //     const p = document.createElement('<p>');
-    //     article.appendChild(p);
-
-    //     const productDescription = document.createClass('productDescription')
-    //     p.appendChild(productDescription)
-
-    //     //retrouver les éléments qui correspondent aux contenus à afficher
-    //     let elt = document.getElementById('items')
-    //     const productImg = document.querySelector('section.items article > img');
-    // ;})
-
-    // JS REACT//
-    // function products (_id, name, description)
-    // {
-    //     this._id='id',
-    //     this.name='name',
-    //     this.description='description'
-        
-    // }
-    // const items = 
-    //     <a href="./product.html?${products._id}">
-    //         <article>
-    //             <img src="${products.img}" alt="${products.altTxt"/>
-    //             <h3 class="productName"></h3>
-    //             <p class="productDescription"></p>
-    //         </article>
-    //     </a>
-
-    // document.querySelector('.items').innerHTML = items;
-
-    // FIN JS REACT
+/*
+ //link between the display of all products and the product page itself
+ document
+   .getElementById("items")
+   .addEventListener("click", items);
+*/
+/*     class productItem {
+     constructor (imageUrl, name, altTxt)
+         {   this.imageUrl='products[].imgUrl',
+             this.name='products[].name',
+             this.altTxt='products[].altTxt',
+         }
+     };
+*/
