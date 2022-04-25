@@ -18,10 +18,45 @@ fetch('http://localhost:3000/api/products')
                 //1. lien du produit / Card
                 // on créé la variable qui correspondra à l'élément du HTML
         let linkElt = document.createElement("a"); 
-        //linkElt = product._Id;
-        linkkElt = URL.searchParams;
+        
+        let href = document.createAttribute('href');
+        linkElt.setAttributeNode(href);
+        
+        
+        // code du dessus fonctionnel = l'attribut href est bien pris en compte dans la console.
+        
+        //linkElt.value = product._id;
+/*
+        href = "http://127.0.0.1:5500/front/html/product.html/(productID)"
+       // href.value=products._id;
+        let url = new URL(href);
+        let productID= URLSearchParams.values(product._id)
+        //let productID = url.searchParams.get('product._id');
+        console.log(productID);
+*/
+        /*
+        linkUrl = URL.searchParams;
+        
+        //urlSearchParams = URL.searchParams;
         let params = (new URL(document.location)).searchParams;
-        let productId = params.get('_Id'); // is the string to the ID".
+        let productId = params.get('_Id'); // is the path to the ID".
+
+        */
+
+/* nouveau test 
+var str = "http://127.0.0.1:5500/front/html/product.html?product-ID";
+var url = new URL(str);
+var name = url.searchParams.get("product-ID");
+console.log(name);
+*/
+
+
+        /*
+        window.addEventListener("DOMContentLoaded", function(){
+
+        }
+        );
+        */
                 // on intègre la variable en tant qu'enfant du parent "section id items" dans HTML
         sectionElt.appendChild(linkElt); 
                 // 2. article
@@ -61,17 +96,8 @@ fetch('http://localhost:3000/api/products')
 
 
 
-/*
+
  //link between the display of all products and the product page itself
  document
-   .getElementById("items")
-   .addEventListener("click", items);
-*/
-/*     class productItem {
-     constructor (imageUrl, name, altTxt)
-         {   this.imageUrl='products[].imgUrl',
-             this.name='products[].name',
-             this.altTxt='products[].altTxt',
-         }
-     };
-*/
+   .getElementsByTagName("a")
+   .addEventListener("click", a);
