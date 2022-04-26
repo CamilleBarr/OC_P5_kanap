@@ -1,4 +1,8 @@
-fetch('http://localhost:3000/api/products')
+let url = new URL (location.href);
+let productId = url.searchParams.get('productId');
+console.log(productId);
+
+fetch('http://localhost:3000/api/products/' + productId )
 //Function "res" permet d'assurer la bonne récupération du fichier:
 .then(function(res){        
     if (res.ok){
@@ -8,8 +12,6 @@ fetch('http://localhost:3000/api/products')
 .then(function(products){ // j'appelle le tableau et récupère les données du tableau
     
     console.log (products); // je vérifie que le tableau est bien intégré
-    
-    //const sectionElt = document.getElementById("items"); // la constance correspondra dans le HTML à la section dont l'ID est items
                 // je créé une boucle qui dit que chaque Items/objects/product dans le tableau/webapi products 
     for (let product of products){ 
                 // on vérifie d'abord que les items/objects/product ooient bien récupérés
@@ -19,17 +21,18 @@ fetch('http://localhost:3000/api/products')
                 // on créé la variable qui correspondra à l'élément du HTML
         
         //si je décommente, le nom et description ne s'affiche plus :
-/*
-        let imageElt = document.createElement('img');
+
+        let imageProduct = document.createElement('img');
  
                 // on récupère la valeur dans le json à afficher 
-        imageElt.src = product.imageUrl;
-        imageElt.alt = product.name;
-    
-        // on intègre la variable en tant qu'enfant du parent "article" dans HTML
-        item__img.appendChild(imageElt);
+        imageProduct.src = product.imageUrl;
+        imageProduct.alt = product.name;
 
-*/        
+        let itemImg = document.getElementByClassName ('item__img');
+        // on intègre la variable en tant qu'enfant du parent "article" dans HTML
+        itemImg.appendChild(imageProduct);
+
+        
         
                 //2. ID Title du produit
         let h3Elt = document.getElementById('title');
@@ -151,10 +154,10 @@ colorOption.innerHTML.value = new products.colors[2];
 {
 })
 
-
 /*
+
  //link between the display of all products and the product page itself
  document
-   .getElementById("items")
-   .addEventListener("click", items);
-*/
+   .getElementsByTagName("a")
+   .addEventListener("click", window.location);
+   */
