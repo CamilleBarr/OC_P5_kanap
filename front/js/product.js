@@ -2,38 +2,95 @@
 
 let url = new URL (location.href);
 let productId = url.searchParams.get('productId');
-console.log(productId);
+console.log('productId', productId);
+//let jsonResponse = {}; 
 
 // Fonction d'affichage des propriétés du produit
 fetch('http://localhost:3000/api/products/' + productId )
-    //.then ((res) => (res.json)) =
-    .then(function(res){        
-        if (res.ok){
-            return res.json()
-        }
+    /* code de Lilian 
+    .then((data) => {
+        console.log('data', data.json())
+        console.log('Promise', data.PromiseResult)
+        //jsonResponse = data.json();
+        //console.log('response', jsonResponse.productID);
     })
-    .then(function(products) { // j'appelle le tableau et récupère toutes les données du tableau
-        console.log (products); // je vérifie que le tableau est bien intégré
-        for (let productDisplay of productId){
-            //let imageProduct = document.getElementByClass('item__img');
-            /*let imageProduct = document.createElement('img');
-            article.div.appendChild(imageProduct);
-                imageProduct.src = products.imageUrl;
-                imageProduct.alt = products.name;}
-            */
+    .catch((error) => {
+        console.log('error');
+    })
 
-            let h3Product = document.getElementById('title');
-                h3Product.innerHTML = products.name;
+    */
+    //.then ((res) => (res.json)) =
+     .then(function(res){        
+         if (res.ok){
+             console.log('res', res);
+             return res.json()
+         }
+     })
+    
+     .then(function appelProduit (product) {
+         console.log('product', productId)
+         
+            let imageClass = document.getElementsByClassName('item__img');
+            console.log('imageClass', imageClass);
+                
+            let imageProduct = document.createElement("img");
+            imageClass[0].appendChild(imageProduct);
+            //return imageProduct;
+
+            imageProduct.src = product.imageUrl;
+            imageProduct.alt = product.name;
+
+            let h1Product = document.getElementById('title');
+                h1Product.innerHTML = product.name;
+            console.log('h1', h1Product);
 
             let priceProduct = document.getElementById('price');
-                priceProduct.innerHTML = products.price;
+                priceProduct.innerHTML = product.price;
+            console.log('priceProduct', priceProduct);
 
-            let description = document.getElementById('description');
-                description.innerHTML = products.description;
+           let description = document.getElementById('description');
+                description.innerHTML = product.description;
+            console.log ('description', description);
+/*
+            let colorsOption = document.getElementById('colors');
+            //colorsOption.value.innerHTML = product.colors;
+            for ( let colorsOption=0; colorsOption<0; i++){
+                colorsOption.value.innerHTML = product.colors;
+                
+             }
+            
+            //console.log(select.options[colorsOption].label);
+            console.log ('colorsOption', colorsOption);
+*/
+            let colorsOption = document.getElementsById('colors');
+            colorsOption.innerHTML = product.colors['']
 
+           // colorsOption = product.colors[''];
+            console.log('colorsOption', colorsOption);
+/*
+            colorsOption = product.colors[1];
+            console.log('colorsOption' , colorsOption);
+                colorsOption = product.colors[2];
+            console.log('colorsOption',colorsOption);
+*/
+            for ( let colorsOption=0; colorsOption<product.colors; i++){
+                colorsOption.innerHTML = product.colors;
         }
-    })
-    .then ((err)=> console.log ("erreur"));
+
+        let maxOrder = getElementById('quantity');
+        maxOrder <= 100;
+        if (maxOrder = true){
+           return "Vous avez dépassé le volume de commande autorisé." + "Merci de passer une deuxième commande.";}
+        else (maxOrder = false) =>{
+            return "N'oubliez pas de valider votre commande";}
+        console.log (maxOrder);
+
+        
+    }
+    )
+    
+     
+     .then ((err)=> console.log ("erreur"));
 
 // fonction de récupération de l'image
 
@@ -83,6 +140,7 @@ fetch('http://localhost:3000/api/products/' + productId )
                 //option 2 : faire une boucle if (value !== false) console.log(value) else consol.log (null)
         
                   //let Value = select.options[products.colors].value;
+                //option 3 : tant que j'ai du contenu, soit opposé à null, j'affiche. sinon, je stop.
                 */
             /*
                 colorOption.value = products.colors[0];
@@ -124,7 +182,7 @@ fetch('http://localhost:3000/api/products/' + productId )
 
         */
         /*
-            let colorsOption = document.getElementById('colors.value');
+            let colorsOption = document.getElementById('colors');
 
             colorsOption = products.colors[0];
             console.log(colorsOption);
@@ -139,10 +197,6 @@ fetch('http://localhost:3000/api/products/' + productId )
               }
             console.log(colorsSelect);
         */
-                // on intègre la variable en tant qu'enfant du parent "a " dans HTML
-        //linkElt.appendChild(articleElt);
-
-
 
 /*
     //link between the display of all products and the product page itself
