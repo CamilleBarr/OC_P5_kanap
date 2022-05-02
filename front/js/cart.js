@@ -3,27 +3,44 @@
         let cartArticle  = document.createElement('article'); 
 
         cartSection.appendChild(cartArticle);
+        cartArticle = document.createAttribute('class=cart__item');
+        cartArticle.data-id("{product-Id}");
+        cartArticle.data-color("{product-color}");
 
-        cartArticle.data-[id] = (productId)
-                //3. img
-                // on créé la variable qui correspondra à l'élément du HTML
         let imageElt = document.createElement('img');
-                // on récupère la valeur dans le json à afficher 
         imageElt.src = product.imageUrl;
         imageElt.alt = product.name;
-                // on intègre la variable en tant qu'enfant du parent "article" dans HTML
-        articleElt.appendChild(imageElt); 
-                //4. h3 et creation de class
-                // on créé la variable qui correspondra à l'élément du HTML
+
+        cartArticle.appendChild(imageElt); 
         let h3Elt = document.createElement('h3'); 
-                // on va chercher la clé de l'item/object/product que l'on souhaite voir apparaitre
+               
         h3Elt.innerHTML = product.name;
-                // on intègre la variable en tant qu'enfant du parent "article" dans HTML 
         articleElt.appendChild(h3Elt); 
-                //5. p et creation de class
-                // on créé la variable qui correspondra à l'élément du HTML
         let pElt = document.createElement('p');
-                // on va chercher la clé de l'item/object/product que l'on souhaite voir apparaitre 
+               
         pElt.innerHTML = product.altTxt;
-                 // on intègre la variable en tant qu'enfant du parent "article" dans HTML 
+                
         articleElt.appendChild(pElt); 
+/*
+        <!--  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
+        <div class="cart__item__img">
+          <img src="../images/product01.jpg" alt="Photographie d'un canapé">
+        </div>
+        <div class="cart__item__content">
+          <div class="cart__item__content__description">
+            <h2>Nom du produit</h2>
+            <p>Vert</p>
+            <p>42,00 €</p>
+          </div>
+          <div class="cart__item__content__settings">
+            <div class="cart__item__content__settings__quantity">
+              <p>Qté : </p>
+              <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+            </div>
+            <div class="cart__item__content__settings__delete">
+              <p class="deleteItem">Supprimer</p>
+            </div>
+          </div>
+        </div>
+      </article> -->
+*/
