@@ -1,202 +1,145 @@
 // Affichage d'un produit à la selection par récupération de l'ID d'un produit
 
-let url = new URL (location.href);
+let url = new URL(location.href);
 let productId = url.searchParams.get('productId');
 console.log('productId', productId);
-//let jsonResponse = {}; 
 
 // Fonction d'affichage des propriétés du produit
-fetch('http://localhost:3000/api/products/' + productId )
-    /* code de Lilian 
-    .then((data) => {
-        console.log('data', data.json())
-        console.log('Promise', data.PromiseResult)
-        //jsonResponse = data.json();
-        //console.log('response', jsonResponse.productID);
+fetch('http://localhost:3000/api/products/' + productId)
+    .then(function (res) {
+        if (res.ok) {
+            console.log('res', res);
+            return res.json()
+        }
     })
-    .catch((error) => {
-        console.log('error');
-    })
+    .then(function appelProduit(product) {
+            console.log('product', productId)
 
-    */
-    //.then ((res) => (res.json)) =
-     .then(function(res){        
-         if (res.ok){
-             console.log('res', res);
-             return res.json()
-         }
-     })
-    
-     .then(function appelProduit (product) {
-         console.log('product', productId)
-         
             let imageClass = document.getElementsByClassName('item__img');
             console.log('imageClass', imageClass);
-                
+
             let imageProduct = document.createElement("img");
             imageClass[0].appendChild(imageProduct);
-            //return imageProduct;
 
             imageProduct.src = product.imageUrl;
             imageProduct.alt = product.name;
 
             let h1Product = document.getElementById('title');
-                h1Product.innerHTML = product.name;
+            h1Product.innerHTML = product.name;
             console.log('h1', h1Product);
 
             let priceProduct = document.getElementById('price');
-                priceProduct.innerHTML = product.price;
+            priceProduct.innerHTML = product.price;
             console.log('priceProduct', priceProduct);
 
-           let description = document.getElementById('description');
-                description.innerHTML = product.description;
-            console.log ('description', description);
-/*
-            let colorsOption = document.getElementById('colors');
-            //colorsOption.value.innerHTML = product.colors;
-            for ( let colorsOption=0; colorsOption<0; i++){
-                colorsOption.value.innerHTML = product.colors;
-                
-             }
+            let description = document.getElementById('description');
+            description.innerHTML = product.description;
+            console.log('description', description);
             
-            //console.log(select.options[colorsOption].label);
-            console.log ('colorsOption', colorsOption);
-*/
-            let colorsOption = document.getElementsById('colors');
-            colorsOption.innerHTML = product.colors['']
+            let selectOption = document.getElementById('colors').options;
+            selectOption.value= selectOption.text;
+            //selectOption.createAttribue = 'value[colors]'; //j'essaye d'indiquer la référence de la couleur dans la value
+            //selectOption.options.setAttribute = ('value', 'colors');    
+            let i = [0];
+            //i.innerHTML = ('value', 'product.colors[""]');
+        
+            for (colors of product.colors) {
+                selectOption.add(new Option(colors, i))
+                i++
+            };
+            //console.log(value=product.colors[''])
 
-           // colorsOption = product.colors[''];
-            console.log('colorsOption', colorsOption);
+            let quantity = document.getElementById('quantity');
 /*
-            colorsOption = product.colors[1];
-            console.log('colorsOption' , colorsOption);
-                colorsOption = product.colors[2];
-            console.log('colorsOption',colorsOption);
+            if (quantitySelected >= 100) {
+                return ("100");
+                //console.log (100);
+            } else (quantitySelected <= 100) 
+                console.log (quantitySeleted);
 */
-            for ( let colorsOption=0; colorsOption<product.colors; i++){
-                colorsOption.innerHTML = product.colors;
-        }
+    })   
+//let cart = array.prototype.map(cartProduct);
 
-        let maxOrder = getElementById('quantity');
-        maxOrder <= 100;
-        if (maxOrder = true){
-           return "Vous avez dépassé le volume de commande autorisé." + "Merci de passer une deuxième commande.";}
-        else (maxOrder = false) =>{
-            return "N'oubliez pas de valider votre commande";}
-        console.log (maxOrder);
 
-        
+let productSelected = ['h1product', 'quantity', 'selectOption'];
+let sendToBasket = productSelected;
+
+let howManyProduct = productSelected.length;
+
+function saveToCart (cart__items) {
+    localStorage.setItem('sendToBasket', JSON.stringify(cart__items));
+}
+
+function getToCart (){
+    let cart__items = localStorage.getItem('cart__items');
+    if (cart__items === null){
+        return [];
+    }else
+    return JSON.parse(cart__items); 
+    //return JSON.parse(localStorage.getItem('basket'));
+}
+
+function addToCart(product){
+    let cart__items = getToCart();
+    let foundProduct =cart__items.find(p => p.id == product.id);
+    if (foundProduct != undefined){
+        foundProduct.quantity++
     }
-    )
-    
-     
-     .then ((err)=> console.log ("erreur"));
-
-// fonction de récupération de l'image
-
-
-    /* 
-    dataImage ()  => {
-        
+    else{
+        product.quantity = 1;
+        cart__items.push(product);
     }
-    */
+    saveToCart(basket);
+}
+
+//let cart = new cartProduct (push.cart);
 
 
-// j'appelle le tableau et récupère les données du tableau
+/*
+
+for (pour chaque click/event ajout au panier){
+basket.add (new cartProduct), i++ };
+
+    monLocalStockage = localStorage;
+    localStorage.setItem = cartProduct;
+
+    let totalProduct = monLocalStorage.lenght;
+*/
+
+
+/*
+let addProduct = document.getElementById('addToCart');
+addProduct.addEventListener('click', function () {
+    if (!selectOption || !quantity ) {
+        alert ("Merci de sélectionner une couleur et une quantité");
+    }
+    else {
+    addProduct.innerHTML = 'Ajouté au panier';}
+
+})          
+*/
+/*
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('addToCart').onchange = changeEventHandler;
+}, false );
+*/
+/*
+function changeEventHandler(event) {
+    if (!event.target.value) alert("--SVP, choisissez une couleur--")
+    else alert(event.target.value);
+}
+*/
+/*
+const selectColor = document.getElementById('colors')
+//document.option.value = products.colors[]
+selectColors.forEach((item) => {
+item.addEventListenner ('click', (event) => {
+    console.log (e.target.id);
     
-     // je vérifie que le tableau est bien intégré
-    //        for (let productImage of imageDuProduit){ 
-        
+})
+})
 
-
-
-
-             // 5. Couleurs
-                    // on créé la variable qui correspondra à l'élément du HTML
-        /*
-                    let productsColors = document.getElementsByName('value');
-                    productsColors = products.colors;
-         for (let productsColors=0; productsColors < select.options.lenght; productsColors++) {
-         
-         console.log(select.options[productsColors].label);
-         }
-        */  
-                /*
-                'option' déjà existant, pas besoin de recréer
-                let colorOption = document.createElement('option');   
-
-                colors.appendChild(colorOption);
-                */
-               /*
-                let colorValue = document.createAttribute('value');
-
-                //let colorOption1.value = document.getElementByTagName('option').value[0];
-                let colorOption = document.getElementByTagName("option")[0];
-                colorOption.setAttributeNode(colorValue);
-                colorValue.value = products.colors;
-                colorOption = new 
-
-                // option 1 : nommer les options une par une
-                //option 2 : faire une boucle if (value !== false) console.log(value) else consol.log (null)
-        
-                  //let Value = select.options[products.colors].value;
-                //option 3 : tant que j'ai du contenu, soit opposé à null, j'affiche. sinon, je stop.
-                */
-            /*
-                colorOption.value = products.colors[0];
-                colorOption.value = new products.colors[0];
-                colorOption.value = new products.colors[1];
-                colorOption.value = new products.colors[2];
-            */
-
-            /*
-            colorOption.innerHTML.value = new products.colors[0];
-            colorOption.innerHTML.value = new products.colors[1];
-            colorOption.innerHTML.value = new products.colors[2];
-            */
-                //console.log(colorOption);
-            /*    
-             
-                colorsSelect.add(colorsOption1);
-                colorsSelect.add(colorsOption2);
-                colorsSelect.add(colorsOption3);
-            */
-
-        document.addEventListener("DOMContentLoaded", function(){
-            document.querySelector('select[name="color-select"]').onchange=changeEventHandler;
-        }, false);
-
-        function changeEventHandler(event) {
-            if(!event.target.value) alert ("--SVP, choisissez une couleur--")
-            else alert (event.target.value);
-        }
-        /*
-        const selectColor = document.getElementById('colors')
-        //document.opinion.value = products.colors[]
-        selectColors.forEach((item) => {
-        item.addEventListenner ('click', (event) => {
-            console.log (e.target.id);
-            
-        })
-        })
-
-        */
-        /*
-            let colorsOption = document.getElementById('colors');
-
-            colorsOption = products.colors[0];
-            console.log(colorsOption);
-                colorsOption = products.colors[1];
-            console.log(colorsOption);
-                colorsOption = products.colors[2];
-            console.log(colorsOption);
-        */
-        /*
-            for(var i = 0; i < select.options.length; i++) {
-                console.log(select.options[i].label);
-              }
-            console.log(colorsSelect);
-        */
+*/
 
 /*
     //link between the display of all products and the product page itself
@@ -205,3 +148,13 @@ fetch('http://localhost:3000/api/products/' + productId )
    .addEventListener("click", window.location);
    
 */
+
+/* ce n'est pas nécessaire ici
+class cartProduct {
+    constructor (productId, quantity, color) {
+         this.productId = 'productId';
+         this.quantity = 'quantity';
+         this.selectOption = 'color';
+        } 
+}
+*/  
