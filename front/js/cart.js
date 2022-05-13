@@ -24,11 +24,11 @@
         divContent.appendChild(description);
 
         let h3Elt = document.createElement('h2'); 
-        h2Elt.innerHTML = "kanap " //product.name; // récupérer le titre du produit
+        h2Elt.innerHTML = product.name; // récupérer le titre du produit
         divContentDescription.appendChild(h2Elt); 
         
         let pColor = document.createElement('p');       
-        pColor.innerHTML = " kanap 3 places" //product.altTxt;//récupérer la couleur sélectionnée
+        pColor.innerHTML = product.altTxt;//récupérer la couleur sélectionnée
         divContentDescription.appendChild(pColor); 
 
         let pPrice = document.createElement('p');       
@@ -87,18 +87,16 @@
       </article> -->
 */
 
-function saveToCart (cart__items) {
-  localStorage.setItem('sendToBasket', JSON.stringify(cart__items));
-}
 
 function getToCart (){
-  let cart__items = localStorage.getItem('cart__items');
+  let cart__items = localStorage.getItem('sendToBasket');
   if (cart__items === null){
       return [];
   }else
   return JSON.parse(cart__items); 
   //return JSON.parse(localStorage.getItem('basket'));
 }
+
 
 function addToCart(product){
   let cart__items = getToCart();
@@ -108,15 +106,27 @@ function addToCart(product){
   }
   else{
       product.quantity = 1;
-      cart__items.push(product);
+      cart__items.push(productSelected);
   }
   saveToCart(basket);
 }
 
+
 function removeFromCart (product){
+
+let minusQuantity = document.getElementsByClassName('deleteItem');
+let i=0;
+for (minustQuantity of itemQuantity) {
+  itemQuantity.delete(minusQuantity), i--}
+console.log(minusQuantity);
+
+}
+
+  /*
   let cart__items = getToCart();
   cart__items = cart__items.filter(p => p.id != product.id);
   saveToCart(cart__items);
+  */
 }
 
 function changeQuantity(product, quantity){
@@ -144,6 +154,7 @@ function changeColor(product, colorSelect){
       }
   }
 }
+let howManyProduct = productSelected.length;
 
 element.addEventListener("DOMContentLoaded", function colorSelect () {
   document.querySelector('select[name="color-select"]').onchange = changeEventHandler;
@@ -152,3 +163,13 @@ element.addEventListener("DOMContentLoaded", function colorSelect () {
 element.addEventListener("DOMContentLoaded", function changeQuantity() {
   document.querySelector('select[name="itemQuantity"]').onchange = changeEventHandler;
 }, false );
+
+/* 
+
+for (i=0; i< listOfProduct.length; i++){
+    let productOffer = fetch("http:LLlocalhost:3000/api/products/" + tableauKanap[].id)
+    .then((res) => {return res.json();})
+
+    let tableauKanap = 
+    
+}
