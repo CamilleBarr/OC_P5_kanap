@@ -1,10 +1,43 @@
+//import {getCart} from './product.js ()';
+//import{saveCart} from './product.js()';
+let cart__items = 
+JSON.parse(localStorage.getItem('listOfProduct'));
+//localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
+
+
+
+//stringify
+//boucle
+
+/*
+fetch('http://localhost:3000/api/products/'+ cart__items)   
+.then (tableauKanap = (res) => {
+let response = () => { 
+    if (cart__items === null){
+        return [];
+    } else {
+    return (getCart);
+    //return JSON.parse(localStorage.getItem('basket'));
+    }
+  }})
+  //)  
+  .then (tableauKanap = () => {
+    */
+let tableauKanap = [c];
+let i = tableauKanap[0];
+for (tableauKanap of tableauKanap) {
+  i=0, i<tableauKanap.lenght, i++
+}
+
+ 
+        
         let cartSection = document.getElementById('cart__items')
         let cartArticle  = document.createElement('article'); 
         cartSection.appendChild(cartArticle);
 
         cartArticle.className = 'class=cart__item';
-        cartArticle.data-id("{product-Id}");// ajouter un data id à vérifier
-        cartArticle.data-color("{product-color}");
+        cartArticle.dataId=("{kanap.id}");// ajouter un data id à vérifier
+        cartArticle.dataColor=("{kanap.color}");
 
         let divImage  = document.createElement('div');
         divImage.className ='cart__item__image';
@@ -24,7 +57,7 @@
         divContent.appendChild(description);
 
         let h3Elt = document.createElement('h2'); 
-        h2Elt.innerHTML = product.name; // récupérer le titre du produit
+        h2Elt.innerHTML = tableauKanap.product.name; // récupérer le titre du produit
         divContentDescription.appendChild(h2Elt); 
         
         let pColor = document.createElement('p');       
@@ -62,8 +95,10 @@
         let pDelete = document.createElement('p');
         pDelete.className = 'deleteItem';
         settingsQuantity.appendChild(pDelete);
+        
+     })
+/*  ce que je dois créer pour intégrer mes données : 
 
-/*
         <!--  <article class="cart__item" data-id="{product-ID}" data-color="{product-color}">
         <div class="cart__item__img">
           <img src="../images/product01.jpg" alt="Photographie d'un canapé">
@@ -87,18 +122,7 @@
       </article> -->
 */
 
-
-function getToCart (){
-  let cart__items = localStorage.getItem('sendToBasket');
-  if (cart__items === null){
-      return [];
-  }else
-  return JSON.parse(cart__items); 
-  //return JSON.parse(localStorage.getItem('basket'));
-}
-
-
-function addToCart(product){
+let addToCart = (product) => {
   let cart__items = getToCart();
   let foundProduct =cart__items.find(p => p.id == product.id);
   if (foundProduct != undefined){
@@ -108,28 +132,26 @@ function addToCart(product){
       product.quantity = 1;
       cart__items.push(productSelected);
   }
-  saveToCart(basket);
 }
 
 
-function removeFromCart (product){
+let removeFromCart = (product) => {
 
 let minusQuantity = document.getElementsByClassName('deleteItem');
 let i=0;
-for (minustQuantity of itemQuantity) {
+for (minusQuantity of itemQuantity) {
   itemQuantity.delete(minusQuantity), i--}
 console.log(minusQuantity);
 
 }
 
-  /*
+/*
   let cart__items = getToCart();
   cart__items = cart__items.filter(p => p.id != product.id);
   saveToCart(cart__items);
-  */
-}
+*/
 
-function changeQuantity(product, quantity){
+let changeQuantity = (productId, quantity) => {
   let cart__items = getToCart();
   let foundProduct = cart__items.find(p => p.id == product.id);
   if (foundProduct != undefined) {
@@ -142,7 +164,7 @@ function changeQuantity(product, quantity){
   }
 }
 
-function changeColor(product, colorSelect){
+let changeColor = (product, colorSelect) => {
   let cart__items = getToCart();
   let foundProduct = cart__items.find(p => p.id == product.id);
   if (foundProduct != undefined) {
@@ -154,13 +176,14 @@ function changeColor(product, colorSelect){
       }
   }
 }
+
 let howManyProduct = productSelected.length;
 
-element.addEventListener("DOMContentLoaded", function colorSelect () {
+element.addEventListener("DOMContentLoaded", changeColor() {
   document.querySelector('select[name="color-select"]').onchange = changeEventHandler;
 }, false );
 
-element.addEventListener("DOMContentLoaded", function changeQuantity() {
+element.addEventListener("DOMContentLoaded", changeQuantity() {
   document.querySelector('select[name="itemQuantity"]').onchange = changeEventHandler;
 }, false );
 
@@ -173,3 +196,4 @@ for (i=0; i< listOfProduct.length; i++){
     let tableauKanap = 
     
 }
+*/

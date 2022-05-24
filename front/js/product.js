@@ -1,10 +1,15 @@
 // Affichage d'un produit à la selection par récupération de l'ID d'un produit
+//1. je créer une nouvelle URL
+//2. qui récupère seulement un objet du tableau JSON = un produit
 
 let url = new URL(location.href);
 let productId = url.searchParams.get('productId');
 console.log('productId', productId);
 
-// Fonction d'affichage des propriétés du produit
+
+//3. affichage d'une page avec vue d'un produit
+
+// function res = vérifie la bonne récupération des données
 fetch('http://localhost:3000/api/products/' + productId)
     .then(function (res) {
         if (res.ok) {
@@ -12,206 +17,162 @@ fetch('http://localhost:3000/api/products/' + productId)
             return res.json()
         }
     })
-    .then(function appelProduit(product) {
-            console.log('product', productId)
 
-            let imageClass = document.getElementsByClassName('item__img');
-            console.log('imageClass', imageClass);
+    // function showProduct = affichage des données de l'API en créant l'espace de l'image, nom etc
+    .then(function (product) {
+        console.log('product', productId)
 
-            let imageProduct = document.createElement("img");
-            imageClass[0].appendChild(imageProduct);
+        let imageClass = document.getElementsByClassName('item__img');
+        console.log('imageClass', imageClass);
 
-            imageProduct.src = product.imageUrl;
-            imageProduct.alt = product.name;
+        let imageProduct = document.createElement("img");
+        imageClass[0].appendChild(imageProduct);
 
-            let h1Product = document.getElementById('title');
-            h1Product.innerHTML = product.name;
-            console.log('h1', h1Product);
+        imageProduct.src = product.imageUrl;
+        imageProduct.alt = product.name;
 
-            let priceProduct = document.getElementById('price');
-            priceProduct.innerHTML = product.price;
-            console.log('priceProduct', priceProduct);
+        let h1Product = document.getElementById('title');
+        h1Product.innerHTML = product.name;
+        console.log('h1', h1Product);
 
-            let description = document.getElementById('description');
-            description.innerHTML = product.description;
-            console.log('description', description);
-            
-            let selectOption = document.getElementById('colors').options;
-            
-            //selectOption.value= typeofString;
-            //selectOption.createAttribue = 'value[colors]'; //j'essaye d'indiquer la référence de la couleur dans la value
-            //selectOption.options.setAttribute = ('value', 'colors');    
-            let i = [0];
-            //i.innerHTML = ('value', 'product.colors[""]');
-        
-            for (colors of product.colors) {
-                selectOption.add(new Option(colors, i))
-                i++
-            };
-            //console.log(value=product.colors[''])
+        let priceProduct = document.getElementById('price');
+        priceProduct.innerHTML = product.price;
+        console.log('priceProduct', priceProduct);
 
-            let quantity = document.getElementById('quantity');
-            
-            class cartProduct {
-                constructor (productId, quantity, color) {
-                    this.productId = 'productId';
-                    this.quantity = 'quantity';
-                    this.selectOption = 'color';
-                    } 
-                    
-            }
-            //let productSelected = ['h1product', 'quantity', 'selectOption'];
+        let description = document.getElementById('description');
+        description.innerHTML = product.description;
+        console.log('description', description);
 
-            let saveProduct = document.getElementById('addToCart'); 
-            saveProduct.addEventListener('click', function (event) {  
-            
-                event.preventDefault();
-                let tableauKanap = [] ;
-                if (localStorage.getItem('listOfProduct') !== undefined) {
-                    tableauKanap = JSON.parse(localStorage.getItem ('listOfProduct'))
-                };
+        let selectOption = document.getElementById('colors').options;
 
-                let kanap = { id: "aa54", quantity: 42, color: "blue" };
+        for (colors of product.colors) {
+            selectOption.add(new Option(colors, colors))
+        };
 
-                let colorSelected = document.getElementById('colors').value;
-                    if (colorSelected === "") {
-                        alert ('Merci de sélectionner une teinte.')
-                    };
+        let quantity = document.getElementById('quantity');
 
-                let quantitySelected = document.getElementById('quantity').value;
-                if (quantitySelected >= 100) {
-                    alert ("Merci de bien vouloir sélectionner un nombre entre 1 et 100."+" "+"Nous vous remercions de votre compréhension");
-                    quantity.value = "0";
-                    //return false;
-                } else if (quantitySelected === value) {
-                    alert ("Merci de bien vouloir sélectionner un nombre entre 1 et 100."+" "+"Nous vous remercions de votre compréhension");
-                    //return false
-                };
+    })
 
-                localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap))
-                for( let i = 0; i < localStorage.length; i++){
-                    localStorage.key(kanap);
+    //function getSelection = au click du bouton, 
+    //1. je récupère les données selected sous forme d'objet
+    //2. J'ajoute des  conditions
+    //3.  
+    .then(function () {
+
+            //for ( addProduct of addProduct) {
+            let addProduct = document.getElementById('addToCart');
+            // je créé un bloc de code qui s'éxectute au clic du bouton
+            addProduct.addEventListener('click', function () {
+
+                let tableauKanap = [];
+
+                let kanap = {
+                    id: productId,
+                    quantity: document.getElementById('quantity').value,
+                    color: document.getElementById('colors').selectedIndex
                 }
+
+                if (localStorage.getItem('listOfProduct') !== null )
+                 {console.log('testList')
+                    tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'))   
+                }
+
+                if (kanap.color == 0) {
+                    alert('Merci de sélectionner une teinte.')
+                } else if (kanap.quantity >= 100 ||
+                    //kanap.quantity == "" ||
+                    kanap.quantity == 0)
+                // || kanapSelected.quantity != numberInteger 
+                {
+                    alert("Merci de bien vouloir sélectionner une quantité comprise entre 1 et 100.");
+                    quantity.value = 0;
+                } else {
+                    //new tableauKanap;
+                    //cart.push(tableauKanap);
+                    //console.log(tableauKanap);           
+                    //cart.push(tableauKanap);
+                    tableauKanap.push(kanap);
+                    localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+                    alert('Votre produit a bien été ajouté au panier.')
+                }
+
+                /*let foundProduct = cart.find(kanap => kanap.id === product.id);
+
+                if (foundProduct != undefined &&
+                    kanap.color != undefined) {
+                    foundProduct.quantity += kanap.quantity;
+
+                    
+                } else {
+                    //new tableauKanap;
+                    cart.push(kanap);
+                }
+                //localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
+                */
             })
         })
-        
-    //tableauKanap.push(kanap)
-/*
-verifier la bonne selection des produits / 
 
-*/
+            /*
+                    function addToCart() {
+                        let cart = getCart();
+                        let foundProduct = cart.find(kanap => kanap.id == product.id);
+                        if (foundProduct != undefined
+                            //&& foundProduct.color == kanap.color 
+                        ) {
+                            foundProduct.quantity += kanap.quantity;
+                            //tableauKanap.push(kanap);
+                            // alert ('Votre produit a bien été ajouté.')
+                        }
+                        else if (foundProduct != undefined  && foundProduct.color != kanap.color ) {
 
+                            cart.push(kanap);
 
-    
-    
+                        } 
+                        else {
+                            //cart.push(kanap);
+                            alert('Votre produit a bien été ajouté.')
+                        }
+                        saveCart(cart);
+                    }
+            */
 
+            //let cart__items = tableauKanap();
 
-/*
-function getToCart (){
-    let cart__items = localStorage.getItem('sendToBasket');
-    if (cart__items === null){
-        return [];
-    }else
-    return JSON.parse(cart__items); 
-    //return JSON.parse(localStorage.getItem('basket'));
-}
-*/
-/*
-function sendToBasket(){
-    let cart__items = productSelected;
-    if (foundProduct === undefined){
-        foundProduct.quantity++
-    }
-    else if (foundProduct !== undefined && foundColor === productSelected[selectOption] ){
-        cart__items.quantity = 1;
-        cart__items.push(productSelected)
-    }
-    else (foundProduct !== undefined && foundColor !== productSelected[selectOption] ){
-        cart__items.quantity =;
-        cart__items.push( new 'productSelected')
-    }
-
-    saveProduct ();
-}
-*/
-/*
-function addToCart(productId){
-    let cart__items = getToCart();
-    let foundProduct =cart__items.find(p => p.id == product.id);
-    if (foundProduct != undefined){
-        foundProduct.quantity++
-    }
-    else{
-        product.quantity = 1;
-        cart__items.push(productId);
-    }
-    saveToCart(basket);
-}
-*/
-
-//let cart = new cartProduct (push.cart);
+            /*
+           
+            */
 
 
-/*
+            /*
+            function getToCart (){
+                let cart__items = localStorage.getItem('sendToBasket');
+                if (cart__items === null){
+                    return [];
+                }else
+                return JSON.parse(cart__items); 
+                //return JSON.parse(localStorage.getItem('basket'));
+            }
+            */
+            /*
+            function addToCart(productId){
+                let cart__items = getToCart();
+                let foundProduct =cart__items.find(p => p.id == product.id);
+                if (foundProduct != undefined){
+                    foundProduct.quantity++
+                }
+                else{
+                    product.quantity ++;
+                    cart__items.push(productId);
+                }
+            }
+            */
+            //let cart = new cartProduct (push.cart);
+            /*
+            for (pour chaque click/event ajout au panier){
+            basket.add (new cartProduct), i++ };
 
-for (pour chaque click/event ajout au panier){
-basket.add (new cartProduct), i++ };
+                monLocalStockage = localStorage;
+                localStorage.setItem = cartProduct;
 
-    monLocalStockage = localStorage;
-    localStorage.setItem = cartProduct;
-
-    let totalProduct = monLocalStorage.lenght;
-*/
-
-
-/*
-let addProduct = document.getElementById('addToCart');
-addProduct.addEventListener('click', function () {
-    if (!selectOption || !quantity ) {
-        alert ("Merci de sélectionner une couleur et une quantité");
-    }
-    else {
-    addProduct.innerHTML = 'Ajouté au panier';}
-
-})          
-*/
-/*
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById('addToCart').onchange = changeEventHandler;
-}, false );
-*/
-/*
-function changeEventHandler(event) {
-    if (!event.target.value) alert("--SVP, choisissez une couleur--")
-    else alert(event.target.value);
-}
-*/
-/*
-const selectColor = document.getElementById('colors')
-//document.option.value = products.colors[]
-selectColors.forEach((item) => {
-item.addEventListenner ('click', (event) => {
-    console.log (e.target.id);
-    
-})
-})
-
-*/
-
-/*
-    //link between the display of all products and the product page itself
-    document
-   .getElementsByTagName("button")
-   .addEventListener("click", window.location);
-   
-*/
-
-/* 
-class cartProduct {
-    constructor (productId, quantity, color) {
-         this.productId = 'productId';
-         this.quantity = 'quantity';
-         this.selectOption = 'color';
-        } 
-}
-*/
+                let totalProduct = monLocalStorage.lenght;
+            */
