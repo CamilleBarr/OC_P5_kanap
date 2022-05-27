@@ -73,7 +73,7 @@ fetch('http://localhost:3000/api/products/' + productId)
                 }
 
                 if (localStorage.getItem('listOfProduct') !== null )
-                 {console.log('testList')
+                 {console.log('listOfProduct')
                     tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'))   
                 }
 
