@@ -18,7 +18,6 @@ console.log(tableauKanap);
 //en fonction du retour consolelog faire boucle
 
   for (let kanap of tableauKanap) {
-
     cart(kanap)
   }
 
@@ -80,6 +79,7 @@ function cart(kanap) {
     
       let pQuantity = document.createElement('p');
       settingsQuantity.appendChild(pQuantity);
+      pQuantity.innerHTML = "Qté : ";
     
       let inputQuantity = document.createElement('input');
       inputQuantity.type = 'number';
@@ -89,7 +89,6 @@ function cart(kanap) {
       inputQuantity.max = '100';
       inputQuantity.value = kanap.quantity;
       settingsQuantity.appendChild(inputQuantity);
-      inputQuantity.textContent = "Qté : ";
     
       let settingsDelete = document.createElement('div');
       settingsDelete.className = 'cart__item__content__settings__delete';
@@ -105,8 +104,6 @@ function cart(kanap) {
       console.log(err, "erreur")
     })
 };
-
-
 
 /*  ce que je dois créer pour intégrer mes données : 
 
