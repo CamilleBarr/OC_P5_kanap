@@ -1,138 +1,111 @@
 /* 
-3. je vérifie le formulaire
-2bis. je récupère les données de l'API directement pour prix, image
-2. j'affiche le localstorage
+7. je créé un évènement au clic "confirmation" avec localStorage etc.
+PARTIE 3
+6. je mets des conditions regex au formulaire
+PARTIE 2
+5. Je créé un calcul sur totalQuantity et totalPrice
+4. je créé un évènement au clic "suppresion" du produit
+4. je créé une condition si doublon de produit
+3. je récupère les données de l'API directement pour le prix, src et text image
+2. j'affiche le localstorage en fonction du contenu
 1. je récupère le localStorage avec lequel je cherche à travailler
+PARTIE 1
 */
 
-//let myLocalStorageStringify = localStorage.getItem('listOfProduct', JSON.stringify('listOfProduct'));
+let tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+console.log(tableauKanap);
 
-let tableauKanap = [];
-tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+//en fonction du retour consolelog faire boucle
 
-let kanap = {
-  
+  for (let kanap of tableauKanap) {
+
+    cart(kanap)
+  }
+
+//localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
+//1//
+function cart(kanap) {
+  fetch('http://localhost:3000/api/products/' + kanap.id)
+    .then(function (res) {
+      if (res.ok) {
+        console.log('res', res);
+        return res.json()
+      }
+    })
+    .then(function (res) {
+      let cartSection = document.getElementById('cart__items');
+      let cartArticle = document.createElement('article');
+    
+      cartSection.appendChild(cartArticle);
+      cartArticle.className = 'cart__item';
+      cartArticle.setAttribute('data-id', res.id); // récupéré de l'API
+      cartArticle.setAttribute('data-color', kanap.color); // récupéré de localStorage
+    
+      let divImage = document.createElement('div');
+      divImage.className = 'cart__item__img';
+      cartArticle.appendChild(divImage);
+    
+      let imageElt = document.createElement('img');
+      imageElt.src = res.imageUrl; // récupérer de l'API
+      imageElt.alt = res.description; // récupérer de l'API
+      divImage.appendChild(imageElt);
+    
+      let divContent = document.createElement('div');
+      divContent.className = 'cart__item__content';
+      cartArticle.appendChild(divContent);
+    
+      let description = document.createElement('div');
+      description.className = 'cart__item__content__description';
+      divContent.appendChild(description);
+    
+      let h2Elt = document.createElement('h2');
+      h2Elt.innerHTML = res.name; // récupérer le titre du produit de l'API
+      description.appendChild(h2Elt);
+    
+      let pColor = document.createElement('p');
+      pColor.textContent = kanap.color; //récupérer la couleur sélectionnée de localStorage
+      description.appendChild(pColor);
+    
+      let pPrice = document.createElement('p');
+      pPrice.innerHTML = (res.price + " €"); //récupérer le prix du produit de l'API
+      description.appendChild(pPrice);
+    
+      let settings = document.createElement('div');
+      settings.className = 'cart__item__content__settings';
+      divContent.appendChild(settings);
+    
+      let settingsQuantity = document.createElement('div');
+      settingsQuantity.className = 'cart__item__content__settings__quantity';
+      settings.appendChild(settingsQuantity);
+    
+      let pQuantity = document.createElement('p');
+      settingsQuantity.appendChild(pQuantity);
+    
+      let inputQuantity = document.createElement('input');
+      inputQuantity.type = 'number';
+      inputQuantity.className = 'itemQuantity';
+      inputQuantity.name = 'itemQuantity'
+      inputQuantity.min = '1';
+      inputQuantity.max = '100';
+      inputQuantity.value = kanap.quantity;
+      settingsQuantity.appendChild(inputQuantity);
+      inputQuantity.textContent = "Qté : ";
+    
+      let settingsDelete = document.createElement('div');
+      settingsDelete.className = 'cart__item__content__settings__delete';
+      settings.appendChild(settingsDelete);
+    
+      let pDelete = document.createElement('p');
+      pDelete.className = 'deleteItem';
+      settingsDelete.appendChild(pDelete);
+      pDelete.innerHTML = "Supprimer";
+
+    })
+    .catch(function (err) {
+      console.log(err, "erreur")
+    })
 };
 
-//boucleProduit = (kanap) => {
-  if (tableauKanap != null) {
-    for (let kanap of tableauKanap){ 
-      
-    //for (i = 0; i <= myLocalStorageParse.length; i++) {
-     cart(kanap)
-   }
-   
-    //console.log(myLocalStorage)
-     //tableauKanap = localStorage.getItem('listOfProduct', JSON.stringify('listOfProduct'))
- } else if (tableauKanap = null) {
-   alert ("Votre panier est vide.")
-}
-//}
-
-
-
- 
-
-
-
-getPrice = () => {
-  //let priceId = url.searchParams.get('price');
-  //let showPrice = fetch('http://localhost:3000/api/localStorage/') + priceId;
-  //let priceKanap = tableauKanap + showPrice + " €";
-  console.log(priceKanap)
-
-}
-
-//}
-//localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
-
-
-//1//
-
-//let myLocalStorage = localStorage.getItem('listOfProduct');
-//let myLocalStorageStringify = localStorage.getItem('listOfProduct', JSON.stringify('listOfProduct'));
-//let myLocalStorageParse = JSON.parse(localStorage.getItem('listOfProduct'));
-//let i = myLocalStorage.productId;
-//let tableauKanap = [0];
-//let listOfProduct = tableauKanap;
-
-
-
-function cart(productId) {
-  //kanap = tableauKanap[i];
-
-  let cartSection = document.getElementById('cart__items');
-  let cartArticle = document.createElement('article');
-
-  cartSection.appendChild(cartArticle);
-  cartArticle.className = 'cart__item';
-  cartArticle.setAttribute('data-id', 'productId._id'); // récupéré de l'API
-  cartArticle.setAttribute('data-color', 'kanap.color'); // récupéré de localStorage
-
-  let divImage = document.createElement('div');
-  divImage.className = 'cart__item__image';
-  cartArticle.appendChild(divImage);
-
-  let imageElt = document.createElement('img');
-  imageElt.src = productId.imageURL; // récupérer de l'API
-  imageElt.alt = productId.altText; // récupérer de l'API
-  divImage.appendChild(imageElt);
-
-  let divContent = document.createElement('div');
-  divContent.className = 'cart__item__content';
-  cartArticle.appendChild(divContent);
-
-  let description = document.createElement('div');
-  description.className = 'cart__item__content__description';
-  divContent.appendChild(description);
-
-  let h2Elt = document.createElement('h2');
-  h2Elt.innerHTML = productId.name; // récupérer le titre du produit de l'API
-  description.appendChild(h2Elt);
-
-  let pColor = document.createElement('p');
-  pColor.innerHTML = kanap.color; //récupérer la couleur sélectionnée de localStorage
-  description.appendChild(pColor);
-
-  let pPrice = document.createElement('p');
-  pPrice.innerHTML = (productId.price + "€"); //récupérer le prix du produit de l'API
-  description.appendChild(pPrice);
-
-  let settings = document.createElement('div');
-  settings.className = 'cart__item__content__settings';
-  divContent.appendChild(settings);
-
-  let settingsQuantity = document.createElement('div');
-  settingsQuantity.className = 'cart__item__content__settings__quantity';
-  settings.appendChild(settingsQuantity);
-
-  let pQuantity = document.createElement('p');
-  settingsQuantity.appendChild(pQuantity);
-
-  let inputQuantity = document.createElement('input');
-  inputQuantity.type = 'number';
-  inputQuantity.className = 'itemQuantity';
-  inputQuantity.name = 'itemQuantity'
-  inputQuantity.min = '1';
-  inputQuantity.max = '100';
-  inputQuantity.value = 'tableauKanap.quantity';
-  settingsQuantity.appendChild(inputQuantity);
-  inputQuantity.innerHTML = tableauKanap.quantity;
-
-  let settingsDelete = document.createElement('div');
-  settingsDelete.className = 'cart__item__content__settings__delete';
-  settings.appendChild(settingsDelete);
-
-  let pDelete = document.createElement('p');
-  pDelete.className = 'deleteItem';
-  settingsDelete.appendChild(pDelete);
-  //pDelete.innerHTML = removeFromCart();
-
- 
-}
-
-  //for (let kanap of tableauKanap) 
-  //for (i=0; i<= myLocalStorage.length; i++) {
 
 
 /*  ce que je dois créer pour intégrer mes données : 
@@ -190,13 +163,4 @@ element.addEventListener("DOMContentLoaded", changeColor() {
 element.addEventListener("DOMContentLoaded", changeQuantity() {
   document.querySelector('select[name="itemQuantity"]').onchange = changeEventHandler;
 }, false);
-*/
-/* 
-for (i=0; i< listOfProduct.length; i++){
-    let productOffer = fetch("http:LLlocalhost:3000/api/products/" + tableauKanap[].id)
-    .then((res) => {return res.json();})
-
-    let tableauKanap = 
-    
-}
 */
