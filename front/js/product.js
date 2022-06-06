@@ -57,6 +57,8 @@ fetch('http://localhost:3000/api/products/' + productId)
     //1. je récupère les données selected sous forme d'objet
     //2. J'ajoute des  conditions
     //3.  
+
+    
     .then(function () {
 
             //for ( addProduct of addProduct) {
@@ -95,22 +97,22 @@ fetch('http://localhost:3000/api/products/' + productId)
                     localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
                     alert('Votre produit a bien été ajouté au panier.')
                 }
-
-                /*let foundProduct = cart.find(kanap => kanap.id === product.id);
-
-                if (foundProduct != undefined &&
-                    kanap.color != undefined) {
-                    foundProduct.quantity += kanap.quantity;
+            /*        
+                let foundProduct = cart.find(kanap => kanap.id === productId.id);
+                let foundProductColor = cart.find(kanap => kanap.color === productId.color)
+                if (foundProduct && foundProductColor) {
+                    kanap.quantity += kanap.value;
 
                     
                 } else {
-                    //new tableauKanap;
+                    kanap.quantity = kanap.value;
                     cart.push(kanap);
                 }
                 //localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
-                */
+            */
             })
         })
+      
 
             /*
                     function addToCart() {
@@ -176,3 +178,43 @@ fetch('http://localhost:3000/api/products/' + productId)
 
                 let totalProduct = monLocalStorage.lenght;
             */
+
+                /*
+                let addToCart = (product) => {
+  let cart__items = getToCart();
+  let foundProduct = cart__items.find(p => p.id == product.id);
+  if (foundProduct != undefined) {
+    foundProduct.quantity++
+  } else {
+    product.quantity = 1;
+    cart__items.push(productSelected);
+  }
+}
+
+let changeColor = (product, colorSelect) => {
+  let cart__items = getToCart();
+  let foundProduct = cart__items.find(p => p.id == product.id);
+  if (foundProduct != undefined) {
+    foundProduct.colorSelect += colorSelect;
+    if (foundProduct.colorSelect <= 0) {
+      removeFromCart(foundProduct);
+    } else {
+      saveToCart(cart__items);
+    }
+  }
+}
+
+let changeQuantity = (productId, quantity) => {
+  let cart__items = getToCart();
+  let foundProduct = cart__items.find(p => p.id == product.id);
+  if (foundProduct != undefined) {
+    foundProduct.quantity += quantity;
+    if (foundProduct.quantity <= 0) {
+      removeFromCart(foundProduct);
+    } else {
+      saveToCart(cart__items);
+    }
+  }
+}
+
+                */
