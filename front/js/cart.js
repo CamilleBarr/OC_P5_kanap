@@ -19,18 +19,14 @@ PARTIE 2
 1. je récupère le localStorage avec lequel je cherche à travailler
 PARTIE 1
 */
-let tableauKanap = [];
- tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 console.log(tableauKanap);
 
-//Object.keys(localStorage).forEach(function(key){
-//  console.log(localStorage.getItem(key));
-//});
 
 //en fonction du retour consolelog faire boucle
 //condition, si produit aux caractéristiques similaires = fusionner et additionner la quantité,
 //sinon, new cart(kanap)
-for ( let kanap of tableauKanap) {
+for (let kanap of tableauKanap) {
   isCart(kanap)
 }
 
@@ -71,7 +67,7 @@ function createHTMLContent(res, kanap) {
   description.appendChild(pColor);
 
   let pPrice = document.createElement('p');
-  pPrice.innerHTML = ((res.price * kanap.quantity) + ",00 €"); //récupérer le prix du produit de l'API
+  pPrice.innerHTML = ((res.price * parseInt(kanap.quantity)) + ",00 €"); //récupérer le prix du produit de l'API
   description.appendChild(pPrice);
 
   let settings = document.createElement('div');
@@ -105,40 +101,6 @@ function createHTMLContent(res, kanap) {
   pDelete.innerHTML = "Supprimer";
 }
 
-let calcNumberByKanap = () => {
-
-//let inputQuantity = document.getElementsByClassName('itemQuantity');
-//let originalQuantity = kanap.quantity;
-/*
-    for (let i = 0; i <= inputQuantity.length; i++) {
-      let changedQuantity = inputQuantity[i];
-      //changedQuantity.addEventListener("DOMContentLoaded", resultQuantity() {
-      //document.querySelector('select[name="itemQuantity"]').onchange = changeEventHandler;
-      //}, false);
-      changedQuantity.addEventListener("change", (e) => {
-          //e.preventDefault();
-          tableauKanap[i].quantity = e.target.value;
-
-          //let result = kanap.find((el) => el.changedQuantity !== kanap[i].quantity);
-          if (tableauKanap[i].quantity <= 0) {
-            
-          localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap)) 
-          location.reload();
-          }
-          //originalQuantity = inputQuantity;
-          //kanap.quantity = result.quantity;
-        })
-        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap)) 
-        location.reload();
-
-      }*/
-//}
-//console.log(inputQuantity)
-}
-
-
-
-
 function isCart(kanap) {
   console.log('kanap', kanap);
   fetch('http://localhost:3000/api/products/' + kanap.id)
@@ -150,7 +112,8 @@ function isCart(kanap) {
     })
     .then(function (res) {
       createHTMLContent(res, kanap);
-      //calcNumberByKanap(kanap);
+      calcNumberByKanap(res, kanap);
+      deleteKanap(res, kanap)
 
     })
     .catch(function (err) {
@@ -158,86 +121,22 @@ function isCart(kanap) {
     })
 };
 
-function calcNumberAllKanap(res, kanap) {
-  let totalQuantity = document.getElementById('totalQuantity')
-  //totalQuantity.innerHTML = allItemQuantity[i]
-
-  //const calcFullPrice = () => {
-
-  //for (i=0; i <= allItemPrice.length; i++){
-  //allItemPrice[i];
-  //}
-
-  //}
-  //}
-
-  //const calcTotalKanap = (res, kanap) => {
-  let allKanap = document.getElementsByClassName('itemQuantity');
 
 
-  //totalQuantity.innerHTML = 
-  for (var i = 0; i < allKanap.length; ++i) {
-    //kanap.forEach(allKanap => {
-    totalQuantity += allKanap[i]
-    //totalQuantity += allKanap;
-  };
-
-  console.log(totalQuantity);
-}
-calcNumberAllKanap()
-/*
-const calcTotalPrice = (res, kanap) => {
-  //sumPrice = "0";
-  let allKanap = document.getElementsByClassName('itemQuantity');
-  //let allKanapPrice = 
-  for (let i = 0; i < isCart.length; i++) {
-    
-    sumPrice += (isCart.inputQuantity[i] * listOfProduct)                                            
-  }
-  
-  let totalPrice = document.getElementById('totalPrice');
-  totalPrice.innerHTML = sumPrice;
-  console.log(sumPrice)
-}
-calcTotalPrice();
-*/
-
-
-
-/*
-element.addEventListener("DOMContentLoaded", changeColor() {
-  document.querySelector('select[name="color-select"]').onchange = changeEventHandler;
-}, false);
-
-
-*/
-/*
-function deleteKanap() {
+let deleteKanap = (res, kanap) => {
   //je me positionne
   let deleteButton = document.querySelectorAll('.deleteItem');
-  
-  console.log(deleteButton)
-      
-  for (let i = 0; i< deleteButton.length; i++) {
-    
-    let button = deleteButton[i];
-    //je crée un évènement au clic
-    button.addEventListener("click", function (event) {
-    //for (deleteButton of cartArticle) {
-      for (btn in btnDelete){
-        let buttonClicked = event.target;
-        buttonClicked.parentElement.parentElement.remove(i)
-  
-      //tableauKanap.splice(i, 1); //supp le produits du tableau localStorage
-      //cartArticle[i].remove(); //supp l'article du DOM
-      
-      //localStorage.setItem("listOfProduct", JSON.stringify(tableauKanap)); //MAJ du localStorage
-      //location.reload(); //rechargement de la page pour mettre à jour le Panier
-      alert ("Article supprimé");
-      }
-    })
+  //for (let i = 0; i < deleteButton.length; i++) {
+  if (kanap.quantity == undefined ||kanap.quantity == 0){
+    localStorage.removeItem("tableauKanap");
   }
-// au clic, je déclare "remove"
+  let button = deleteButton[i];
 
+  button.addEventListener("click", () => {
+    localStorage.removeItem("tableauKanap");
+    alert("Votre produit est supprimé");
+  })
+  localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap))
+  location.reload();
 }
-*/
+

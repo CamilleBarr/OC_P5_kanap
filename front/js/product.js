@@ -58,10 +58,9 @@ fetch('http://localhost:3000/api/products/' + productId)
     //2. J'ajoute des  conditions
     //3.  
 
-    
+
     .then(function () {
 
-            //for ( addProduct of addProduct) {
             let addProduct = document.getElementById('addToCart');
             // je créé un bloc de code qui s'éxectute au clic du bouton
             addProduct.addEventListener('click', function () {
@@ -74,112 +73,112 @@ fetch('http://localhost:3000/api/products/' + productId)
                     color: document.getElementById('colors').selectedIndex
                 }
 
-                if (localStorage.getItem('listOfProduct') !== null )
-                 {console.log('listOfProduct')
-                    tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'))   
+                if (localStorage.getItem('listOfProduct') !== null) {
+                    console.log('listOfProduct')
+                    tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'))
                 }
 
                 if (kanap.color == 0) {
                     alert('Merci de sélectionner une teinte.')
                 } else if (kanap.quantity >= 100 ||
-                    //kanap.quantity == "" ||
                     kanap.quantity == 0)
                 // || kanapSelected.quantity != numberInteger 
                 {
                     alert("Merci de bien vouloir sélectionner une quantité comprise entre 1 et 100.");
                     quantity.value = 0;
                 } else {
-                    //new tableauKanap;
-                    //cart.push(tableauKanap);
-                    //console.log(tableauKanap);           
-                    //cart.push(tableauKanap);
                     tableauKanap.push(kanap);
                     localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
                     alert('Votre produit a bien été ajouté au panier.')
                 }
-            /*        
-                let foundProduct = cart.find(kanap => kanap.id === productId.id);
-                let foundProductColor = cart.find(kanap => kanap.color === productId.color)
-                if (foundProduct && foundProductColor) {
-                    kanap.quantity += kanap.value;
 
-                    
+
+                let originalQuantity = tableauKanap.find(kanap => kanap.quantity != productId.quantity);
+                
+                let foundProductId = tableauKanap.find(kanap => kanap.id === productId.id);
+                let foundProductColor = tableauKanap.find(kanap => kanap.color === productId.color);
+                console.log("tableauKanap", tableauKanap);
+                if (foundProductId &&
+                    foundProductColor
+                ) {
+
                 } else {
-                    kanap.quantity = kanap.value;
-                    cart.push(kanap);
+                    tableauKanap.push(kanap);
                 }
-                //localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
-            */
+                localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+
             })
-        })
-      
+        
+    })
 
-            /*
-                    function addToCart() {
-                        let cart = getCart();
-                        let foundProduct = cart.find(kanap => kanap.id == product.id);
-                        if (foundProduct != undefined
-                            //&& foundProduct.color == kanap.color 
-                        ) {
-                            foundProduct.quantity += kanap.quantity;
-                            //tableauKanap.push(kanap);
-                            // alert ('Votre produit a bien été ajouté.')
-                        }
-                        else if (foundProduct != undefined  && foundProduct.color != kanap.color ) {
 
-                            cart.push(kanap);
 
-                        } 
-                        else {
-                            //cart.push(kanap);
-                            alert('Votre produit a bien été ajouté.')
-                        }
-                        saveCart(cart);
-                    }
-            */
+/*
+        function addToCart() {
+            let cart = getCart();
+            let foundProduct = cart.find(kanap => kanap.id == product.id);
+            if (foundProduct != undefined
+                //&& foundProduct.color == kanap.color 
+            ) {
+                foundProduct.quantity += kanap.quantity;
+                //tableauKanap.push(kanap);
+                // alert ('Votre produit a bien été ajouté.')
+            }
+            else if (foundProduct != undefined  && foundProduct.color != kanap.color ) {
 
-            //let cart__items = tableauKanap();
+                cart.push(kanap);
 
-            /*
+            } 
+            else {
+                //cart.push(kanap);
+                alert('Votre produit a bien été ajouté.')
+            }
+            saveCart(cart);
+        }
+*/
+
+//let cart__items = tableauKanap();
+
+/*
            
             */
 
 
-            /*
-            function getToCart (){
-                let cart__items = localStorage.getItem('sendToBasket');
-                if (cart__items === null){
-                    return [];
-                }else
-                return JSON.parse(cart__items); 
-                //return JSON.parse(localStorage.getItem('basket'));
-            }
-            */
-            /*
-            function addToCart(productId){
-                let cart__items = getToCart();
-                let foundProduct =cart__items.find(p => p.id == product.id);
-                if (foundProduct != undefined){
-                    foundProduct.quantity++
-                }
-                else{
-                    product.quantity ++;
-                    cart__items.push(productId);
-                }
-            }
-            */
-            //let cart = new cartProduct (push.cart);
-            /*
-            for (pour chaque click/event ajout au panier){
-            basket.add (new cartProduct), i++ };
+/*
+function getToCart (){
+    let cart__items = localStorage.getItem('sendToBasket');
+    if (cart__items === null){
+        return [];
+    }else
+    return JSON.parse(cart__items); 
+    //return JSON.parse(localStorage.getItem('basket'));
+}
+*/
+/*
+function addToCart(productId){
+    let cart__items = getToCart();
+    let foundProduct =cart__items.find(p => p.id == product.id);
+    if (foundProduct != undefined){
+        foundProduct.quantity++
+    }
+    else{
+        product.quantity ++;
+        cart__items.push(productId);
+    }
+}
+*/
+//let cart = new cartProduct (push.cart);
+/*
+for (pour chaque click/event ajout au panier){
+basket.add (new cartProduct), i++ };
 
-                monLocalStockage = localStorage;
-                localStorage.setItem = cartProduct;
+    monLocalStockage = localStorage;
+    localStorage.setItem = cartProduct;
 
-                let totalProduct = monLocalStorage.lenght;
-            */
+    let totalProduct = monLocalStorage.lenght;
+*/
 
-                /*
+/*
                 let addToCart = (product) => {
   let cart__items = getToCart();
   let foundProduct = cart__items.find(p => p.id == product.id);
