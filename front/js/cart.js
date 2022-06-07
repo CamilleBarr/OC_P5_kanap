@@ -112,7 +112,7 @@ function isCart(kanap) {
     })
     .then(function (res) {
       createHTMLContent(res, kanap);
-      calcNumberByKanap(res, kanap);
+      //calcNumberByKanap(res, kanap);
       deleteKanap(res, kanap)
 
     })
@@ -124,19 +124,30 @@ function isCart(kanap) {
 
 
 let deleteKanap = (res, kanap) => {
-  //je me positionne
-  let deleteButton = document.querySelectorAll('.deleteItem');
-  //for (let i = 0; i < deleteButton.length; i++) {
-  if (kanap.quantity == undefined ||kanap.quantity == 0){
-    localStorage.removeItem("tableauKanap");
-  }
-  let button = deleteButton[i];
+    //je me positionne
+    //let deleteButton = document.getElementsByClassName('deleteItem');
+    pDelete.addEventListener("click", (e) => {
+          e.preventDefault;
 
-  button.addEventListener("click", () => {
-    localStorage.removeItem("tableauKanap");
-    alert("Votre produit est supprimé");
-  })
-  localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap))
-  location.reload();
-}
+          // enregistrer l'id et la couleur séléctionnés par le bouton supprimer
+          let deleteId = tableauKanap[i].kanap.id;
+          let deleteColor = tableauKanap[i].kanap.color;
 
+          // filtrer l'élément cliqué par le bouton supprimer
+          tableauKanap = tableauKanap.filter(kanap => res.id !== deleteId || res.color !== deleteColor);
+
+          // envoyer les nouvelles données dans le localStorage
+          localStorage.setItem('cart', JSON.stringify(tableauKanap));
+
+          // avertir de la suppression et recharger la page
+          alert('Votre article a bien été supprimé.');
+
+          //Si pas de produits dans le local storage on affiche que le panier est vide
+          if (tableauKanap.length === 0) {
+            localStorage.clear();
+            //const removedItems = tableauKanap.splice(i);
+          }
+          //Refresh rapide de la page
+          location.reload();
+        })
+      }
