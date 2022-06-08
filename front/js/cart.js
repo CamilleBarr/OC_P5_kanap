@@ -3,33 +3,50 @@ BUG :
 
 console.log de totalPrice affiche NAN
 console.log de totalQuantity s'affiche à la suite en tant que string pas en tant que nombre
-le prix s'affiche en fct de la quantité, mais ne se met pas à jour dans le localStorage
-afficher un prix décimal avec 2 chiffres après la virgule
-afficher le text couleur plutôt qu'un chiffre
+le prix s'affiche en fct de la quantité, mais ne se met pas à jour dans le localStorage 
+afficher un prix décimal avec 2 chiffres après la virgule - parseFloat()
 
 7. je créé un évènement au clic "confirmation" avec localStorage etc.
 PARTIE 3
 6. je mets des conditions regex au formulaire
 PARTIE 2
 5. Je créé un calcul sur totalQuantity et totalPrice
-4. je créé un évènement au clic "suppression" du produit
+4. je créé un évènement au clic "suppression" du produit - fonctionne le 08/06/22
 4. je créé une condition si doublon de produit
-3. je récupère les données de l'API directement pour le prix, src et text image
-2. j'affiche le localstorage en fonction du contenu
-1. je récupère le localStorage avec lequel je cherche à travailler
+3. je récupère les données de l'API directement pour le prix, src et text image // fonctionne
+2. j'affiche le localstorage en fonction du contenu / fonctionne
+1. je récupère le localStorage avec lequel je cherche à travailler / fonctionne
 PARTIE 1
 */
 tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 console.log(tableauKanap);
 
+if (!tableauKanap) {
+  let subtitle1 = document.createElement('h1');
+  subtitle1.setAttribute('style', 'text-align:center');
+  subtitle1.innerHTML = "est vide."
+  cart__items.appendChild(subtitle1);
+
+  let subtitle2 = document.createElement('h2');
+  //subtitle.setAttribute("href=index.html")
+  subtitle2.setAttribute('style', 'text-align:center');
+  subtitle2.innerHTML = "Avez-vous vu notre page d'accueil ?"
+  cart__items.appendChild(subtitle2);
+}
+
 
 //en fonction du retour consolelog faire boucle
 //condition, si produit aux caractéristiques similaires = fusionner et additionner la quantité,
 //sinon, new cart(kanap)
+
 for (let kanap of tableauKanap) {
   isCart(kanap)
 }
-
+/*
+for (i = 0; i < tableauKanap.length; i++) {
+  isCart(tableauKanap[i])
+}
+*/
 //localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
 //1//
 function createHTMLContent(res, kanap) {
@@ -99,6 +116,34 @@ function createHTMLContent(res, kanap) {
   pDelete.className = 'deleteItem';
   settingsDelete.appendChild(pDelete);
   pDelete.innerHTML = "Supprimer";
+  
+  pDelete.addEventListener("click", (e) => {
+    e.preventDefault;
+    
+      // enregistrer l'id et la couleur séléctionnés par le bouton supprimer
+      let deleteId = kanap.id;
+      let deleteColor = kanap.color;
+
+      // filtrer l'élément cliqué par le bouton supprimer
+      tableauKanap = tableauKanap.filter(kanap => kanap.id !== deleteId || kanap.color !== deleteColor);
+
+      // envoyer les nouvelles données dans le localStorage
+      localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+
+      // avertir de la suppression et recharger la page
+      alert('Votre article a bien été supprimé.');
+
+      //Si pas de produits dans le local storage on affiche que le panier est vide
+      if (tableauKanap.length === 0) {
+        localStorage.clear();
+        alert("Il n'y a pas d'article dans votre panier.");
+        //const removedItems = tableauKanap.splice(i);
+      }
+      //Refresh rapide de la page
+      location.reload();
+    
+  })
+  
 }
 
 function isCart(kanap) {
@@ -113,7 +158,7 @@ function isCart(kanap) {
     .then(function (res) {
       createHTMLContent(res, kanap);
       //calcNumberByKanap(res, kanap);
-      deleteKanap(res, kanap)
+      
 
     })
     .catch(function (err) {
@@ -123,31 +168,12 @@ function isCart(kanap) {
 
 
 
-let deleteKanap = (res, kanap) => {
-    //je me positionne
-    //let deleteButton = document.getElementsByClassName('deleteItem');
-    pDelete.addEventListener("click", (e) => {
-          e.preventDefault;
-
-          // enregistrer l'id et la couleur séléctionnés par le bouton supprimer
-          let deleteId = tableauKanap[i].kanap.id;
-          let deleteColor = tableauKanap[i].kanap.color;
-
-          // filtrer l'élément cliqué par le bouton supprimer
-          tableauKanap = tableauKanap.filter(kanap => res.id !== deleteId || res.color !== deleteColor);
-
-          // envoyer les nouvelles données dans le localStorage
-          localStorage.setItem('cart', JSON.stringify(tableauKanap));
-
-          // avertir de la suppression et recharger la page
-          alert('Votre article a bien été supprimé.');
-
-          //Si pas de produits dans le local storage on affiche que le panier est vide
-          if (tableauKanap.length === 0) {
-            localStorage.clear();
-            //const removedItems = tableauKanap.splice(i);
-          }
-          //Refresh rapide de la page
-          location.reload();
-        })
-      }
+let deleteItem = (kanap) => {
+  //je me positionne
+  //let deleteButton = document.getElementsByClassName('deleteItem');
+  //for (let kanap of tableauKanap) {
+    //deleteButton.addEventListener("click", (e) => {
+    
+  
+//}
+}
