@@ -86,9 +86,9 @@ let addToCart = (product) => {
         // || kanapSelected.quantity != numberInteger 
         {
             alert("Merci de bien vouloir sélectionner une quantité comprise entre 1 et 100.");
-            quantity.value = 0;
+            
         } else {
-            tableauKanap.push(kanap);
+            //tableauKanap.push(kanap);
             localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
             alert('Votre produit a bien été ajouté au panier.')
         }
