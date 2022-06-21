@@ -1,13 +1,13 @@
 /* 
+A PEAUFINER : 
+ajout produit similaire, 
+creuser le formulaire
 BUG : 
-si deux produits même ID et que j'en supprime 1, les deux lignes sont supprimées
-console.log de totalPrice affiche NAN
-console.log de totalQuantity s'affiche à la suite en tant que string pas en tant que nombre
-le prix s'affiche en fct de la quantité, mais ne se met pas à jour dans le localStorage 
+console.log de totalPrice affiche null
+console.log de totalQuantity affiche 0
 afficher un prix décimal avec 2 chiffres après la virgule - parseFloat()
 
 7. je créé un évènement au clic "confirmation" avec localStorage etc.
-PARTIE 3
 6. je mets des conditions regex au formulaire
 PARTIE 2
 5. Je créé un calcul sur totalQuantity et totalPrice(se fait directement dans create element)
@@ -18,10 +18,15 @@ PARTIE 2
 1. je récupère le localStorage avec lequel je cherche à travailler / fonctionne
 PARTIE 1
 */
+
+
+
+// Ecoute les champs du formulaire
+
 tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 console.log(tableauKanap);
 
-if (!tableauKanap) {
+if (!tableauKanap || tableauKanap == 0) {
   let subtitle1 = document.createElement('h1');
   subtitle1.setAttribute('style', 'text-align:center');
   subtitle1.innerHTML = "est vide."
@@ -33,7 +38,6 @@ if (!tableauKanap) {
   subtitle2.innerHTML = "Avez-vous vu notre page d'accueil ?"
   cart__items.appendChild(subtitle2);
 }
-
 
 //en fonction du retour consolelog faire boucle
 //condition, si produit aux caractéristiques similaires = fusionner et additionner la quantité,
@@ -79,7 +83,7 @@ else {
     description.appendChild(pColor);
 
     let pPrice = document.createElement('p');
-    pPrice.innerHTML = ((parseFloat(res.price) * parseInt(kanap.quantity)) + ",00 €"); //récupérer le prix du produit de l'API
+    pPrice.innerHTML = ((parseFloat(res.price) * parseInt(kanap.quantity)) + ",00 €"); //récupérer le prix du produit de l'API    
     description.appendChild(pPrice);
 
     let settings = document.createElement('div');
@@ -110,7 +114,7 @@ else {
       1. récupère tableauKanap
       2. findIndex (à la place de find pour récupérer l'index du tableau VS ID du produit avec e.target.name. On recherche l'index grâce à l'ID)  tableauKanap[indexTrouvé].quantity = e.target.value 
       2bis. e.target.name donne l'ID e.target.value (pour la quantité)
-      3. enregistrer localStorage
+      
       */
 
       let storageQuantity = parseInt(kanap.quantity);
@@ -120,14 +124,18 @@ else {
       inputQuantityValue = e.target.value;
       console.log('localQuantity :', inputQuantityValue);
 
-      let kanapId = res.id;
       let kanapName = kanap.name;
+
+      //2. Conditions d'enregistrement dans le localStorage et si remplies, 
+      //on recherche le produit qui a le même nom et une valeur différente,
+      //on défini alors que la valeur du localStorage sera celle du target / input.
 
       if (e.target.value > 100 || e.target.value != parseInt(e.target.value)) {
         alert('Merci de sélectionner un nombre entier entre 1 et 100');
         e.target.value = kanap.quantity;
       } else if (e.target.value <= 0) {
         alert("Merci de sélectionner une quantité supérieur à 0 ou supprimer l'article de votre panier")
+        e.target.value = kanap.quantity;
       } else {
         let findResult = tableauKanap.filter((kanap) => e.target.value !== storageQuantity && e.target.name === kanapName);
         console.log('find', findResult);
@@ -137,9 +145,9 @@ else {
 
         //3. j'enregistre dans le localStorage
         localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+        pPrice.innerHTML = ((parseFloat(res.price) * parseInt(e.target.value)) + ",00 €");
       }
     })
-
 
     let settingsDelete = document.createElement('div');
     settingsDelete.className = 'cart__item__content__settings__delete';
@@ -152,33 +160,69 @@ else {
 
     pDelete.addEventListener("click", (e) => {
       e.preventDefault;
-
-      // enregistrer l'id et la couleur séléctionnés par le bouton supprimer
       let deleteId = kanap.id;
-
       let deleteColor = kanap.color;
-      console.log('test delete', deleteId, deleteColor);
-      // filtrer l'élément cliqué par le bouton supprimer
-      tableauKanap = tableauKanap.filter(kanap => tableauKanap.id !== deleteId || tableauKanap.color !== deleteColor);
 
-      // envoyer les nouvelles données dans le localStorage
+      // j'enregistre l'id et la couleur séléctionnées par le bouton "supprimer"
+      //console.log('test delete', );
+      // je filtre l'élément cliqué par le bouton supprimer
+
+      let findProduct = tableauKanap.findIndex(kanap => kanap.id == deleteId && kanap.color == deleteColor);
+      console.log("find product result :", findProduct);
+
+      tableauKanap.splice(findProduct, 1);
+      console.log("find Product pop result :", findProduct);
+
+      //j'envoie les nouvelles données dans le localStorage
       localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
 
-      // avertir de la suppression et recharger la page
+      // j'averti de la suppression et recharger la page
       alert('Votre article a bien été supprimé.');
-
-      //Si pas de produits dans le local storage on affiche que le panier est vide
-      if (tableauKanap.length === 0) {
+      window.location.reload();
+      if (productLocalStorage.length === 0) {
         localStorage.clear();
-        alert("Il n'y a pas d'article dans votre panier.");
-        //const removedItems = tableauKanap.splice(i);
       }
-      //Refresh rapide de la page
-      location.reload();
     })
   }
 }
 
+function totalKanap(kanap, res) {
+  let totalQuantity = document.getElementById("totalQuantity");
+  totalQuantity.innerHTML = 0;
+  let quantity = 0;
+
+  for (let kanap in tableauKanap) {
+    quantity += parseInt(kanap.quantity);
+    totalQuantity.innerHTML = quantity;
+    console.log("quantity :", quantity)
+  }
+
+  let totalPrice = document.getElementById("totalPrice");
+  totalPrice.innerHTML = 0;
+  let price = 0;
+
+  for (let kanap in tableauKanap) {
+    price += quantity * (parseInt(res.price));
+    console.log("price :", price)
+    totalPrice.innerHTML = price;
+  }
+}
+
+/*
+const calcTotalPrice = (res, kanap) => {
+  let sumPrice = 0;
+  let allKanap = document.getElementsByClassName('itemQuantity');
+  //let allKanapPrice = 
+  for (let i = 0; i < isCart.length; i++) {
+
+    sumPrice += (isCart.inputQuantity[i] * listOfProduct)
+  }
+  console.log("sumPrice :", sumPrice);
+  let totalPrice = document.getElementById('totalPrice');
+  totalPrice.innerHTML = sumPrice;
+
+}
+*/
 function isCart(kanap) {
   console.log('kanap', kanap);
   fetch('http://localhost:3000/api/products/' + kanap.id)
@@ -190,8 +234,8 @@ function isCart(kanap) {
     })
     .then(function (res) {
       createHTMLContent(res, kanap);
-      //calcTotalKanap(kanap);
-      //calcTotalPrice(res, kanap);
+
+      totalKanap(res, kanap);
 
     })
     .catch(function (err) {
@@ -199,36 +243,88 @@ function isCart(kanap) {
     })
 };
 
+//--------PART 2 :
+
+let otherRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
+let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
+let addressRegExp = new RegExp("^[0-9]{1,4}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+
+let firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
+let lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
+let addressErrorMsg = document.querySelector("#addressErrorMsg");
+let cityErrorMsg = document.querySelector("#cityErrorMsg");
+let emailErrorMsg = document.querySelector("#emailErrorMsg");
+
+document.getElementById("firstName").addEventListener("change", () => {
+  if (otherRegExp.test(firstName.value)) {
+    firstNameErrorMsg.innerHTML = "";
+  } else {
+    firstNameErrorMsg.innerHTML = "Veuillez noter le prénom au format indiqué";
+  }
+})
+document.getElementById("lastName").addEventListener("change", () => {
+  if (otherRegExp.test(lastName.value)) {
+    lastNameErrorMsg.innerHTML = "";
+  } else {
+    lastNameErrorMsg.innerHTML = "Veuillez notre le nom au format indiqué";
+  }
+})
+document.getElementById("address").addEventListener("change", () => {
+  if (addressRegExp.test(address.value)) {
+    addressErrorMsg.innerHTML = "";
+  } else {
+    addressErrorMsg.innerHTML = "Veuillez noter l'adresse au format indiqué";
+  }
+})
+document.getElementById("city").addEventListener("change", () => {
+  if (otherRegExp.test(city.value)) {
+    cityErrorMsg.innerHTML = "";
+  } else {
+    cityErrorMsg.innerHTML = "Veuillez noter la ville au format indiqué";
+  }
+})
+document.getElementById("email").addEventListener("change", () => {
+  if (emailRegExp.test(email.value)) {
+    emailErrorMsg.innerHTML = "";
+  } else {
+    emailErrorMsg.innerHTML = "Veuillez noter l'adresse email au format indiqué";
+  }
+})
+
 function getForm() {
   let form = document.querySelector(".cart__order__form");
+  let orderButton = document.getElementById("order");
 
-  let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
-  let charRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
-  let addressRegExp = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+  let product_ID = [];
 
-  getForm();
+  orderButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    let contact = {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value,
+    };
 
-  //voir comment est crée l'objet contact et bien relire la demande technique
+    for (kanap of tableauKanap) {
+      product_ID.push(kanap.id);
+    };
+
+    let finalOrderId = {
+      contact,
+      product_ID
+    };
+    /*
+        fetch original cart link
+        .then(res => res.json())
+        .then((product_ID) => {
+          change the cart link to the confirmation link
+            location.assign(location.href.replace("cart.html", `confirmation.html....)
+        })
+        .catch(error => console.log('error :', error));
+      })
+      */
+  })
 }
-
-/*
-let calcTotalKanap = (kanap) => {
-  let totalQuantity = document.getElementById('totalQuantity');
-  let allKanap = document.getElementsByClassName('itemQuantity').value;
-   
-  
-  //totalQuantity.innerHTML = 
-  for (i=0; i < allKanap.length; i++) {
-    let allKanap=kanap.quantity;//allKanap = itemQuantity.value;
-  //for (let allKanap in TableauKanap) {
-      //kanap.forEach(allKanap => {
-      //totalQuantity += allKanap.quantity;
-      //totalQuantity += allKanap;
-     
-      totalQuantity.innerHTML = kanap.quantity*kanap;
-
-  };
-  console.log(allKanap);
-  console.log(totalQuantity);
-}
-*/
+getForm()
