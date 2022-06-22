@@ -1,16 +1,19 @@
 /* 
 A PEAUFINER : 
+ouverture de nouvelle page confirmation
 ajout produit similaire, 
 creuser le formulaire
-BUG : 
-console.log de totalPrice affiche null
-console.log de totalQuantity affiche 0
 afficher un prix décimal avec 2 chiffres après la virgule - parseFloat()
 
-7. je créé un évènement au clic "confirmation" avec localStorage etc.
-6. je mets des conditions regex au formulaire
+BUG : 
+totalPrice et totalQuantity ne se mettent pas à jour avec l'input juste utilise le localStorage
+
+9. je créé un évènement au clic "confirmation" qui me renvoit sur une autre page (sans ouvrir de nouvel onglet)
+8. suivant demande client : 
+je récupère un tableau des ID du produit + le formulaire de contact qui, se retrouvent dans un object à part 'finalOrderId'
+7. Je récupère les champs et applique les conditions RegExp
+6. je mets des conditions regex au formulaire // OK
 PARTIE 2
-5. Je créé un calcul sur totalQuantity et totalPrice(se fait directement dans create element)
 4. je créé un évènement au clic "suppression" du produit - fonctionne le 08/06/22
 4. je créé une condition si doublon de produit
 3. je récupère les données de l'API directement pour le prix, src et text image // fonctionne
@@ -19,9 +22,7 @@ PARTIE 2
 PARTIE 1
 */
 
-
-
-// Ecoute les champs du formulaire
+//----PARTIE 1 : affichage panier
 
 tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 console.log(tableauKanap);
@@ -186,43 +187,40 @@ else {
   }
 }
 
-function totalKanap(kanap, res) {
-  let totalQuantity = document.getElementById("totalQuantity");
-  totalQuantity.innerHTML = 0;
-  let quantity = 0;
+function totalKanap(res) {
 
-  for (let kanap in tableauKanap) {
-    quantity += parseInt(kanap.quantity);
-    totalQuantity.innerHTML = quantity;
-    console.log("quantity :", quantity)
+  let quantitySelector = document.querySelectorAll(".itemQuantity");
+  let itemAmount = 0;
+  for (let i = 0; i < quantitySelector.length; i++) {
+    itemAmount += parseInt(quantitySelector[i].value);
+  }
+
+  let totalQuantity = document.getElementById("totalQuantity");
+  totalQuantity.innerHTML = itemAmount;
+
+  //let priceSelector = document.querySelectroAll(".cart__item__content__description:nth-child(2)");
+
+//  let priceSelector = document.querySelectorAll(".cart__item__content__description");
+ // console.log("priceSelector :", priceSelector);
+ // let priceChildSelector = priceSelector.querySelectorAll('p:nth-child(2');
+  //console.log("priceChildSelector :", priceSelectorAll);
+
+//  var mainDiv = document.getElementsByClassName('cart__item__content__description'),
+//  childDiv = mainDiv.getElementsByTagName('p')[0],
+//  requiredDiv = childDiv.getElementsByTagName('p')[1];
+
+
+  let price = 0;
+  for (let i = 0; i < quantitySelector.length; i++) {
+    price += itemAmount*(parseInt(res.price));
+    console.log("price :", price);
   }
 
   let totalPrice = document.getElementById("totalPrice");
-  totalPrice.innerHTML = 0;
-  let price = 0;
-
-  for (let kanap in tableauKanap) {
-    price += quantity * (parseInt(res.price));
-    console.log("price :", price)
-    totalPrice.innerHTML = price;
-  }
+  totalPrice.innerHTML = price;
 }
 
-/*
-const calcTotalPrice = (res, kanap) => {
-  let sumPrice = 0;
-  let allKanap = document.getElementsByClassName('itemQuantity');
-  //let allKanapPrice = 
-  for (let i = 0; i < isCart.length; i++) {
 
-    sumPrice += (isCart.inputQuantity[i] * listOfProduct)
-  }
-  console.log("sumPrice :", sumPrice);
-  let totalPrice = document.getElementById('totalPrice');
-  totalPrice.innerHTML = sumPrice;
-
-}
-*/
 function isCart(kanap) {
   console.log('kanap', kanap);
   fetch('http://localhost:3000/api/products/' + kanap.id)
@@ -234,7 +232,6 @@ function isCart(kanap) {
     })
     .then(function (res) {
       createHTMLContent(res, kanap);
-
       totalKanap(res, kanap);
 
     })
@@ -243,7 +240,7 @@ function isCart(kanap) {
     })
 };
 
-//--------PART 2 :
+//--------PART 2 : traitement du formulaire
 
 let otherRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
 let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
@@ -254,6 +251,8 @@ let lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
 let addressErrorMsg = document.querySelector("#addressErrorMsg");
 let cityErrorMsg = document.querySelector("#cityErrorMsg");
 let emailErrorMsg = document.querySelector("#emailErrorMsg");
+
+// https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
 
 document.getElementById("firstName").addEventListener("change", () => {
   if (otherRegExp.test(firstName.value)) {
@@ -291,13 +290,18 @@ document.getElementById("email").addEventListener("change", () => {
   }
 })
 
-function getForm() {
-  let form = document.querySelector(".cart__order__form");
-  let orderButton = document.getElementById("order");
+// ----- PARTIE 3 : SYNTHESE ET VALIDATION DE COMMANDE
 
+
+
+function getForm() {
+  let orderButton = document.getElementById("order");
+  let form = document.querySelector(".cart__order__form");
   let product_ID = [];
 
-  orderButton.addEventListener("click", (event) => {
+  form.addEventListener("submit", (event) => {
+    //submit est mieux, comportement natif , compatible focus, améliore accessibilité
+    //vérifier 
     event.preventDefault();
     let contact = {
       firstName: firstName.value,
@@ -311,20 +315,26 @@ function getForm() {
       product_ID.push(kanap.id);
     };
 
-    let finalOrderId = {
+    let dataToSend = {
       contact,
       product_ID
     };
-    /*
-        fetch original cart link
-        .then(res => res.json())
-        .then((product_ID) => {
-          change the cart link to the confirmation link
-            location.assign(location.href.replace("cart.html", `confirmation.html....)
-        })
-        .catch(error => console.log('error :', error));
+
+    fetch("http://localhost:3000/api/products/order", {
+        method: 'POST',
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        mode: "cors",
+        body: dataToSend
       })
-      */
+      .then(resp => resp.json())
+      .then(data => {
+        document.location.href = "./confirmation.html?" +
+          data.orderId;
+      })
+
   })
 }
 getForm()
