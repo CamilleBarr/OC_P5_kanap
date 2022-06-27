@@ -25,7 +25,6 @@ PARTIE 1
 //----PARTIE 1 : affichage panier
 
 tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
-console.log(tableauKanap);
 
 if (!tableauKanap || tableauKanap == 0) {
   let subtitle1 = document.createElement('h1');
@@ -45,9 +44,12 @@ if (!tableauKanap || tableauKanap == 0) {
 //sinon, new cart(kanap)
 else {
   for (let kanap of tableauKanap) {
-    isCart(kanap)
+    isCart(kanap);
+
+
   }
   //localStorage.setItem('listOfProduct', JSON.stringify(listOfProduct));
+
 
   function createHTMLContent(res, kanap) {
     let cartSection = document.getElementById('cart__items');
@@ -147,12 +149,20 @@ else {
         //3. j'enregistre dans le localStorage
         localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
         pPrice.innerHTML = ((parseFloat(res.price) * parseInt(e.target.value)) + ",00 €");
+
+
+        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+
+        // j'averti de la suppression et recharger la page
+        //window.location.reload();
+
       }
     })
 
     let settingsDelete = document.createElement('div');
     settingsDelete.className = 'cart__item__content__settings__delete';
     settings.appendChild(settingsDelete);
+
 
     let pDelete = document.createElement('p');
     pDelete.className = 'deleteItem';
@@ -187,46 +197,32 @@ else {
   }
 }
 
-function totalKanap(res) {
+function totalKanap(res, kanap) {
+  //let quantitySelector = tableauKanap.quantity;
+  let quantitySelector = document.getElementsByClassName('itemQuantity');
+  if (tableauKanap !== null || inputQuantity.value != kanap.quantity) {
 
-  let quantitySelector = document.querySelectorAll(".itemQuantity");
-  let itemAmount = 0;
-  for (let i = 0; i < quantitySelector.length; i++) {
-    itemAmount += parseInt(quantitySelector[i].value);
+    let itemAmount = 0;
+    let price = 0;
+
+    for (let i = 0; i < quantitySelector.length; i++) {
+      itemAmount += quantitySelector[i].valueAsNumber;
+      price += itemAmount * (parseInt(res.price));
+    }
+
+    let totalQuantity = document.getElementById("totalQuantity");
+    totalQuantity.innerHTML = itemAmount;
+
+    let totalPrice = document.getElementById("totalPrice");
+    totalPrice.innerHTML = price;
   }
 
-  let totalQuantity = document.getElementById("totalQuantity");
-  totalQuantity.innerHTML = itemAmount;
-
-  //let priceSelector = document.querySelectroAll(".cart__item__content__description:nth-child(2)");
-
-//  let priceSelector = document.querySelectorAll(".cart__item__content__description");
- // console.log("priceSelector :", priceSelector);
- // let priceChildSelector = priceSelector.querySelectorAll('p:nth-child(2');
-  //console.log("priceChildSelector :", priceSelectorAll);
-
-//  var mainDiv = document.getElementsByClassName('cart__item__content__description'),
-//  childDiv = mainDiv.getElementsByTagName('p')[0],
-//  requiredDiv = childDiv.getElementsByTagName('p')[1];
-
-
-  let price = 0;
-  for (let i = 0; i < quantitySelector.length; i++) {
-    price += itemAmount*(parseInt(res.price));
-    console.log("price :", price);
-  }
-
-  let totalPrice = document.getElementById("totalPrice");
-  totalPrice.innerHTML = price;
 }
 
-
 function isCart(kanap) {
-  console.log('kanap', kanap);
   fetch('http://localhost:3000/api/products/' + kanap.id)
     .then(function (res) {
       if (res.ok) {
-        console.log('res', res);
         return res.json()
       }
     })
@@ -236,105 +232,122 @@ function isCart(kanap) {
 
     })
     .catch(function (err) {
-      console.log("erreur", err)
+      console.log("erreur :", err)
     })
 };
 
-//--------PART 2 : traitement du formulaire
+//--------PART 2 : récupération du formulaire
 
-let otherRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
-let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
-let addressRegExp = new RegExp("^[0-9]{1,4}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+function getForm() {
 
-let firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
-let lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
-let addressErrorMsg = document.querySelector("#addressErrorMsg");
-let cityErrorMsg = document.querySelector("#cityErrorMsg");
-let emailErrorMsg = document.querySelector("#emailErrorMsg");
+  let otherRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
+  let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
+  let addressRegExp = new RegExp("^[0-9]{1,4}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
 
-// https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+  let firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
+  let lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
+  let addressErrorMsg = document.querySelector("#addressErrorMsg");
+  let cityErrorMsg = document.querySelector("#cityErrorMsg");
+  let emailErrorMsg = document.querySelector("#emailErrorMsg");
 
-document.getElementById("firstName").addEventListener("change", () => {
-  if (otherRegExp.test(firstName.value)) {
-    firstNameErrorMsg.innerHTML = "";
-  } else {
-    firstNameErrorMsg.innerHTML = "Veuillez noter le prénom au format indiqué";
-  }
-})
-document.getElementById("lastName").addEventListener("change", () => {
-  if (otherRegExp.test(lastName.value)) {
-    lastNameErrorMsg.innerHTML = "";
-  } else {
-    lastNameErrorMsg.innerHTML = "Veuillez notre le nom au format indiqué";
-  }
-})
-document.getElementById("address").addEventListener("change", () => {
-  if (addressRegExp.test(address.value)) {
-    addressErrorMsg.innerHTML = "";
-  } else {
-    addressErrorMsg.innerHTML = "Veuillez noter l'adresse au format indiqué";
-  }
-})
-document.getElementById("city").addEventListener("change", () => {
-  if (otherRegExp.test(city.value)) {
-    cityErrorMsg.innerHTML = "";
-  } else {
-    cityErrorMsg.innerHTML = "Veuillez noter la ville au format indiqué";
-  }
-})
-document.getElementById("email").addEventListener("change", () => {
-  if (emailRegExp.test(email.value)) {
-    emailErrorMsg.innerHTML = "";
-  } else {
-    emailErrorMsg.innerHTML = "Veuillez noter l'adresse email au format indiqué";
-  }
-})
+  // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+
+  document.getElementById("firstName").addEventListener("change", () => {
+    if (otherRegExp.test(firstName.value)) {
+      firstNameErrorMsg.innerHTML = "";
+    } else {
+      firstNameErrorMsg.innerHTML = "Veuillez renseigner votre prénom";
+    }
+  })
+  document.getElementById("lastName").addEventListener("change", () => {
+    if (otherRegExp.test(lastName.value)) {
+      lastNameErrorMsg.innerHTML = "";
+    } else {
+      lastNameErrorMsg.innerHTML = "Veuillez renseigner votre nom";
+    }
+  })
+  document.getElementById("address").addEventListener("change", () => {
+    if (addressRegExp.test(address.value)) {
+      addressErrorMsg.innerHTML = "";
+    } else {
+      addressErrorMsg.innerHTML = "Veuillez préciser le numéro, type de voie et nom de voie";
+    }
+  })
+  document.getElementById("city").addEventListener("change", () => {
+    if (otherRegExp.test(city.value)) {
+      cityErrorMsg.innerHTML = "";
+    } else {
+      cityErrorMsg.innerHTML = "Veuillez retirer les accents";
+    }
+  })
+  document.getElementById("email").addEventListener("change", () => {
+    if (emailRegExp.test(email.value)) {
+      emailErrorMsg.innerHTML = "";
+    } else {
+      emailErrorMsg.innerHTML = "Veuillez noter l'adresse email selon le standart";
+    }
+  })
+}
+getForm();
 
 // ----- PARTIE 3 : SYNTHESE ET VALIDATION DE COMMANDE
 
+function postForm() {
 
-
-function getForm() {
-  let orderButton = document.getElementById("order");
   let form = document.querySelector(".cart__order__form");
-  let product_ID = [];
 
   form.addEventListener("submit", (event) => {
-    //submit est mieux, comportement natif , compatible focus, améliore accessibilité
-    //vérifier 
-    event.preventDefault();
-    let contact = {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      address: address.value,
-      city: city.value,
-      email: email.value,
-    };
+      //let order = document.getElementById("order").submit();
 
-    for (kanap of tableauKanap) {
-      product_ID.push(kanap.id);
-    };
+      event.preventDefault();
 
-    let dataToSend = {
-      contact,
-      product_ID
-    };
+      // "Requête JSON contenant un objet de contact et un tableau de produits"
 
-    fetch("http://localhost:3000/api/products/order", {
-        method: 'POST',
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json",
-        },
-        mode: "cors",
-        body: dataToSend
+      let products = [];
+      for (kanap of tableauKanap) {
+        products.push(kanap.id);
+      };
+
+      // "Pour les routes POST, l’objet contact envoyé au serveur doit contenir les champs firstName,
+      // lastName, address, city et email "
+
+      let contact = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        email: document.getElementById('email').value,
+      };
+
+      // "Le tableau des produits envoyé au back-end doit être un
+      //array de strings product-ID. Les types de ces champs et leur présence doivent être validés
+      //avant l’envoi des données au serveur."
+
+
+      let dataToSend = JSON.stringify({
+        "contact": contact,
+        "products": products
+      });
+
+
+      fetch("http://localhost:3000/api/products/" + {
+          method: 'POST',
+          headers: {
+            //accept: "application/json",
+            "content-type": "application/json",
+          },
+          body: dataToSend,
+          //redirect: 'follow',
+          //mode: "cors"})
+        })
+        .then(res => 
+          res.json()
+        )
+        .then(data => {
+          //localStorage.setItem('orderId', orderId);
+          document.location.href = "./confirmation.html?"+ data.confirmationId
+        })
+        .catch(error => console.log('error', error));
       })
-      .then(resp => resp.json())
-      .then(data => {
-        document.location.href = "./confirmation.html?" +
-          data.orderId;
-      })
-
-  })
-}
-getForm()
+  }
+  postForm()

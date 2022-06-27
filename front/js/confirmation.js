@@ -1,5 +1,6 @@
-let url = new URL(window.location.href); 
-let finalOrderId = url.searchParams.get("finalOrderId"); 
-console.log(finalOrderId);
+let url = new URL(location.href); 
+let finalOrderId = url.searchParams.get("orderId"); 
+console.log("orderId :", orderId);
 
 document.getElementById("orderId").innerHTML = finalOrderId;
+localStorage.clear();
