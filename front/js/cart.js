@@ -297,57 +297,63 @@ function postForm() {
   let form = document.querySelector(".cart__order__form");
 
   form.addEventListener("submit", (event) => {
-      //let order = document.getElementById("order").submit();
+    //let order = document.getElementById("order").submit();
 
-      event.preventDefault();
+    event.preventDefault();
 
-      // "Requête JSON contenant un objet de contact et un tableau de produits"
+    // "Requête JSON contenant un objet de contact et un tableau de produits"
 
-      let products = [];
-      for (kanap of tableauKanap) {
-        products.push(kanap.id);
-      };
+    let products = [];
+    for (kanap of tableauKanap) {
+      products.push(kanap.id);
+    };
 
-      // "Pour les routes POST, l’objet contact envoyé au serveur doit contenir les champs firstName,
-      // lastName, address, city et email "
+    // "Pour les routes POST, l’objet contact envoyé au serveur doit contenir les champs firstName,
+    // lastName, address, city et email "
 
-      let contact = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        address: document.getElementById('address').value,
-        city: document.getElementById('city').value,
-        email: document.getElementById('email').value,
-      };
+    let contact = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      address: document.getElementById('address').value,
+      city: document.getElementById('city').value,
+      email: document.getElementById('email').value,
+    };
 
-      // "Le tableau des produits envoyé au back-end doit être un
-      //array de strings product-ID. Les types de ces champs et leur présence doivent être validés
-      //avant l’envoi des données au serveur."
+    // "Le tableau des produits envoyé au back-end doit être un
+    //array de strings product-ID. Les types de ces champs et leur présence doivent être validés
+    //avant l’envoi des données au serveur."
 
+    function orderNumber(min, max) {
+      return parseInt(Math.random() * (max - min) + min);
+    }
+    let orderNo = orderNumber(1, 10000);
 
-      let dataToSend = JSON.stringify({
-        "contact": contact,
-        "products": products
-      });
+    let dataToSend = JSON.stringify({
+      "contact": contact,
+      "products": products,
+      //"orderNo": orderNo,
+    });
+    console.log(dataToSend);
 
-
-      fetch("http://localhost:3000/api/products/" + {
-          method: 'POST',
-          headers: {
-            //accept: "application/json",
-            "content-type": "application/json",
-          },
-          body: dataToSend,
-          //redirect: 'follow',
-          //mode: "cors"})
-        })
-        .then(res => 
-          res.json()
-        )
-        .then(data => {
-          //localStorage.setItem('orderId', orderId);
-          document.location.href = "./confirmation.html?"+ data.confirmationId
-        })
-        .catch(error => console.log('error', error));
+    fetch("http://localhost:3000/api/products/" + {
+        method: 'POST',
+        headers: {
+          //accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: dataToSend,
+        //redirect: 'follow',
+        //mode: "cors"})
       })
-  }
-  postForm()
+      .then(res =>
+        res.json()
+      )
+      .then(dataToSend => {
+        localStorage.setItem('orderNo', orderNo);
+        let order = JSON.parse(localStorage.getItem('orderNo'));
+        document.location.href = "./confirmation.html?orderNo=" + order;
+      })
+      .catch(error => console.log('error', error));
+  })
+}
+postForm()

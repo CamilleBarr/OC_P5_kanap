@@ -1,6 +1,11 @@
 let url = new URL(location.href); 
-let finalOrderId = url.searchParams.get("orderId"); 
-console.log("orderId :", orderId);
 
-document.getElementById("orderId").innerHTML = finalOrderId;
+let orderNo= url.searchParams.get("order", order); 
+console.log("orderNo:", orderNo);
+
+let order = JSON.parse(localStorage.getItem('orderNo'));
+console.log("order:", order)
+
+document.getElementById("orderId").innerHTML = order;
 localStorage.clear();
+
