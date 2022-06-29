@@ -1,11 +1,11 @@
+//Function "res" permet d'assurer la bonne récupération de l'API products
 fetch('http://localhost:3000/api/products')
-//Function "res" permet d'assurer la bonne récupération du fichier:
 .then(function(res){        
     if (res.ok){
         return res.json()
     }
 })
-//Fonction "product" permet de récupérer tous les produits 
+//Promesse / function "product" permet de créer l'architecture de la page et y intégrer les données de l'API
 .then(function(products){
     console.log (products);
     const sectionElt = document.getElementById("items");
@@ -28,6 +28,7 @@ fetch('http://localhost:3000/api/products')
         articleElt.appendChild(pElt); 
     };
 })
+//Promesse / Function catch permet de nous renvoyer une erreur en place de la promesse res et affichage de l'architecture produit
 .catch(function(err)
 {
     console.log(err, "erreur")

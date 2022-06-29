@@ -169,7 +169,14 @@ else {
     settingsDelete.appendChild(pDelete);
     pDelete.innerHTML = "Supprimer";
 
-    pDelete.addEventListener("click", (e) => {
+
+  }
+}
+
+function deleteKanap(kanap) {
+  let pDelete = document.getElementsByClassName('deleteItem');
+  for (i = 0; i < pDelete.length; i++) {
+    pDelete[i].addEventListener("click", (e) => {
       e.preventDefault;
       let deleteId = kanap.id;
       let deleteColor = kanap.color;
@@ -196,6 +203,7 @@ else {
     })
   }
 }
+
 
 function totalKanap(res, kanap) {
   //let quantitySelector = tableauKanap.quantity;
@@ -228,6 +236,7 @@ function isCart(kanap) {
     })
     .then(function (res) {
       createHTMLContent(res, kanap);
+      deleteKanap(kanap);
       totalKanap(res, kanap);
 
     })
