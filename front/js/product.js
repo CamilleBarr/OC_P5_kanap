@@ -63,7 +63,7 @@ let addToCart2 = (product) => {
             alert("Merci de bien vouloir sélectionner une quantité comprise entre 1 et 100.");
             return kanap == undefined;
         }
-        if (localStorage.getItem('listOfProduct') !== null) {
+        if (localStorage.getItem('listOfProduct')) {
             // permet d'ajouter autant de produit que l'on veut au tableau, si absent, le produit est remplacé par la nouvelle sélection, 
             // soit, on ne peut commander qu'une seule référence
             tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'))
@@ -73,9 +73,10 @@ let addToCart2 = (product) => {
             if (foundProduct != undefined) {
                 let finalSelection = (parseInt(foundProduct.quantity) + parseInt(kanap.quantity));
                 foundProduct.quantity = finalSelection;
-                console.log("finalSelection :", finalSelection)
+                console.log("finalSelection :", finalSelection);
             } else {
                 tableauKanap.push(kanap);
+                alert("Votre produit a bien été ajouté au panier");
             }
             localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
         }
