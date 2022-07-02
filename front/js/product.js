@@ -74,6 +74,7 @@ let addToCart2 = (product) => {
                 let finalSelection = (parseInt(foundProduct.quantity) + parseInt(kanap.quantity));
                 foundProduct.quantity = finalSelection;
                 console.log("finalSelection :", finalSelection);
+                alert("Ce produit a déjà été ajouté. La quantité sélectionnée a été ajouté");
             } else {
                 tableauKanap.push(kanap);
                 alert("Votre produit a bien été ajouté au panier");
