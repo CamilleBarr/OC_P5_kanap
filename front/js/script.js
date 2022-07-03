@@ -7,10 +7,8 @@ fetch('http://localhost:3000/api/products')
 })
 //Promesse / function "product" permet de créer l'architecture de la page et y intégrer les données de l'API
 .then(function(products){
-    console.log (products);
     const sectionElt = document.getElementById("items");
-    for (let product of products){ 
-        console.log (product) 
+    for (let product of products){
         let linkElt = document.createElement("a"); 
         linkElt.href = "./product.html?productId="+ product._id;
         sectionElt.appendChild(linkElt); 

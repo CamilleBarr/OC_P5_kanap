@@ -57,8 +57,8 @@ else {
 
     cartSection.appendChild(cartArticle);
     cartArticle.className = 'cart__item';
-    cartArticle.setAttribute('data-id', res.id); // récupéré de l'API
-    cartArticle.setAttribute('data-color', tableauKanap.color); // récupéré de localStorage
+    cartArticle.setAttribute('data-id', res._id); // récupéré de l'API
+    cartArticle.setAttribute('data-color', kanap.color); // récupéré de localStorage
 
     let divImage = document.createElement('div');
     divImage.className = 'cart__item__img';
@@ -181,10 +181,11 @@ function deleteKanap(kanap) {
     tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
     console.log("tableauKanap:", tableauKanap);
     pDeleteUnit.addEventListener("click", () => {
+      
+      let deleteId = pDeleteUnit.closest('article').getAttribute('data-id');
+      let deleteColor = pDeleteUnit.closest('article').getAttribute('data-color');
+      console.log("deleteId & deleteColor :", deleteId, deleteColor);
       if (localStorage.getItem('listOfProduct')) {
-        let deleteId = pDeleteUnit.closest('article').getAttribute("data-id");
-        let deleteColor = pDeleteUnit.closest('article').getAttribute("data-color");
-        console.log("deleteId & deleteColor :", deleteId, deleteColor);
         for (kanap of tableauKanap) {
           findProduct = tableauKanap.filter((kanap) => (deleteId != kanap.id, deleteColor != kanap.color));
           console.log("findProduct :", findProduct);
@@ -192,15 +193,14 @@ function deleteKanap(kanap) {
           tableauKanap = findProduct;
           localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
         }
-        //j'envoie les nouvelles données dans le localStorage
-        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
         // j'averti de la suppression et recharger la page
         alert('Votre article a bien été supprimé.');
         window.location.reload();
-        if (productLocalStorage.length == 0) {
-          localStorage.clear(findProduct);
-        }
-      }
+        
+      }/*
+      if (productLocalStorage.length == 0) {
+        localStorage.clear(findProduct);
+      }*/
     })
   }
 }
