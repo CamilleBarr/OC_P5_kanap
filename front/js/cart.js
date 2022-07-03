@@ -173,6 +173,33 @@ else {
   }
 }
 
+function changedQuantity(kanap, res) {
+  const quantityItem = document.querySelectorAll('.itemQuantity');
+  for (let k = 0; k < quantityItem.length; k++) {
+    let quantityItemUnit = quantityItem[k];
+    let quantityItemID = quantityItemUnit.closest('article').getAttribute("data-id");
+    let quantityItemColor = quantityItemUnit.closest('article').getAttribute("data-color");
+
+    quantityItemUnit.addEventListener('click', function () {
+      if (localStorage.getItem('listOfProduct')) {
+        // permet d'ajouter autant de produit que l'on veut au tableau, si absent, le produit est remplacé par la nouvelle sélection, 
+        // soit, on ne peut commander qu'une seule référence
+        tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+
+        foundProduct = tableauKanap.find(quantityItemUnit => quantityItemID == kanap.id && quantityItemColor == kanap.color);
+
+        let finalSelection = (quantityItemUnit.value);
+        foundProduct.quantity = finalSelection;
+
+        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+
+        location.reload()
+
+      }
+    })
+  }
+}
+
 function deleteKanap(kanap) {
   const pDelete = document.querySelectorAll('.deleteItem');
   for (let i = 0; i < pDelete.length; i++) {
@@ -236,6 +263,7 @@ function isCart(kanap) {
     })
     .then(function (res) {
       createHTMLContent(res, kanap);
+      changedQuantity(res, kanap);
       deleteKanap(kanap);
       totalKanap(res, kanap);
 
