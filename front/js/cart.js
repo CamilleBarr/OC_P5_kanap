@@ -174,36 +174,36 @@ else {
 }
 
 function deleteKanap(kanap) {
-  let pDelete = document.getElementsByClassName('deleteItem');
-  for (i = 0; i < pDelete.length; i++) {
-    pDelete[i].addEventListener("click", (e) => {
-      e.preventDefault;
-      let deleteId = kanap.id;
-      let deleteColor = kanap.color;
-
-      // j'enregistre l'id et la couleur séléctionnées par le bouton "supprimer"
-      //console.log('test delete', );
-      // je filtre l'élément cliqué par le bouton supprimer
-
-      let findProduct = tableauKanap.findIndex(kanap => kanap.id == deleteId && kanap.color == deleteColor);
-      console.log("find product result :", findProduct);
-
-      tableauKanap.splice(findProduct, 1);
-      console.log("find Product pop result :", findProduct);
-
-      //j'envoie les nouvelles données dans le localStorage
-      localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
-
-      // j'averti de la suppression et recharger la page
-      alert('Votre article a bien été supprimé.');
-      window.location.reload();
-      if (productLocalStorage.length === 0) {
-        localStorage.clear();
+  const pDelete = document.querySelectorAll('.deleteItem');
+  for (let i = 0; i < pDelete.length; i++) {
+    let pDeleteUnit = pDelete[i];
+    console.log("pDeleteUnit:", pDeleteUnit);
+    tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+    console.log("tableauKanap:", tableauKanap);
+    pDeleteUnit.addEventListener("click", () => {
+      if (localStorage.getItem('listOfProduct')) {
+        let deleteId = pDeleteUnit.closest('article').getAttribute("data-id");
+        let deleteColor = pDeleteUnit.closest('article').getAttribute("data-color");
+        console.log("deleteId & deleteColor :", deleteId, deleteColor);
+        for (kanap of tableauKanap) {
+          findProduct = tableauKanap.filter((kanap) => (deleteId != kanap.id, deleteColor != kanap.color));
+          console.log("findProduct :", findProduct);
+          //j'envoie les nouvelles données dans le localStorage
+          tableauKanap = findProduct;
+          localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+        }
+        //j'envoie les nouvelles données dans le localStorage
+        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+        // j'averti de la suppression et recharger la page
+        alert('Votre article a bien été supprimé.');
+        window.location.reload();
+        if (productLocalStorage.length == 0) {
+          localStorage.clear(findProduct);
+        }
       }
     })
   }
 }
-
 
 function totalKanap(res, kanap) {
   //let quantitySelector = tableauKanap.quantity;
