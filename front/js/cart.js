@@ -1,7 +1,4 @@
 /* 
-BUG : 
-totalPrice et totalQuantity ne se mettent pas à jour avec l'input juste utilise le localStorage
-
 9. je créé un évènement au clic "confirmation" qui me renvoit sur une autre page (sans ouvrir de nouvel onglet)
 8. suivant demande client : 
 je récupère un tableau des ID du produit + le formulaire de contact qui, se retrouvent dans un object à part 'finalOrderId'
@@ -107,61 +104,49 @@ function createHTMLContent(res, kanap) {
   pDelete.innerHTML = "Supprimer";
 }
 
+function changedQuantity(kanap) {
+  const quantityItems = document.querySelectorAll('.itemQuantity');
+  for (let i = 0; i < quantityItems.length; i++) {
+    quantityItems[i].addEventListener('click', function () {
+      let originalQuantity = kanap.quantity;
+      let changedQuantity = quantityItems[i].valueAsNumber;
 
-function changedQuantity(kanap, res) {
-  const quantityItem = document.querySelectorAll('.itemQuantity');
-  for (let k = 0; k < quantityItem.length; k++) {
-    let quantityItemUnit = quantityItem[k];
-    let quantityItemID = quantityItemUnit.closest('article').getAttribute("data-id");
-    let quantityItemColor = quantityItemUnit.closest('article').getAttribute("data-color");
-    let finalSelection = (quantityItemUnit.value);
-    quantityItemUnit.addEventListener('click', function () {
-        // permet d'ajouter autant de produit que l'on veut au tableau, si absent, le produit est remplacé par la nouvelle sélection, 
-        // soit, on ne peut commander qu'une seule référence
 
-        tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 
-          foundProduct = tableauKanap.find(quantityItemUnit => quantityItemID == kanap.id && quantityItemColor == kanap.color);
-          //let newQuantity = (quantityItemUnit.value) ;
-          foundProduct.quantity = finalSelection;
+      let findProduct = tableauKanap.find((kanap) => kanap.originalQuantity !== changedQuantity);
+      findProduct.quantity = changedQuantity;
 
-          localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+      let finalSelection = changedQuantity;
+      originalQuantity = finalSelection;
 
-        //}
-        location.reload();
-
+      localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+      location.reload()
     })
   }
 }
 
 function deleteKanap() {
-  const pDelete = document.querySelectorAll('.deleteItem');
-  for (let i = 0; i < pDelete.length; i++) {
-    let pDeleteUnit = pDelete[i];
-    pDeleteUnit.addEventListener("click", () => {
+  const deleteSelectors = document.querySelectorAll('.deleteItem');
+  for (let i = 0; i < deleteSelectors.length; i++) {
+    let deleteSelector = deleteSelectors[i];
+    deleteSelector.addEventListener("click", () => {
 
       let deleteId = pDeleteUnit.closest('article').getAttribute('data-id');
       let deleteColor = pDeleteUnit.closest('article').getAttribute('data-color');
 
-      findProduct = tableauKanap.filter((kanap) => (deleteId != kanap.id, deleteColor != kanap.color));
-      console.log(findProduct);
-      tableauKanap = findProduct;
+      filterProduct = tableauKanap.filter((kanap) => (deleteId != kanap.id, deleteColor != kanap.color));
+      tableauKanap = filterProduct;
       localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
 
-      // j'averti de la suppression et recharger la page
       alert('Votre article a bien été supprimé.');
       window.location.reload();
     })
-    /*
-                if (productLocalStorage.length == 0) {
-                  localStorage.clear(findProduct);
-                }*/
   }
 }
 
 function calcTotalKanap() {
 
-  let quantitySelector = document.getElementsByClassName('itemQuantity');
+  const quantitySelector = document.getElementsByClassName('itemQuantity');
   let totalQuantity = 0;
 
   for (let i = 0; i < quantitySelector.length; i++) {
@@ -195,7 +180,7 @@ function isCart(kanap) {
     })
     .then(function (res) {
       createHTMLContent(res, kanap);
-      changedQuantity(res, kanap);
+      changedQuantity(kanap);
       deleteKanap(kanap);
       calcTotalKanap();
       calcTotalPrice(res, kanap);
