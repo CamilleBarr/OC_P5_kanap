@@ -86,7 +86,8 @@ else {
     description.appendChild(pColor);
 
     let pPrice = document.createElement('p');
-    pPrice.innerHTML = ((parseFloat(res.price) * parseInt(kanap.quantity)) + ",00 €"); //récupérer le prix du produit de l'API    
+    let pPriceValue = (parseFloat(res.price) * parseInt(kanap.quantity));
+    pPrice.innerHTML = pPriceValue + ",00 €"; //récupérer le prix du produit de l'API    
     description.appendChild(pPrice);
 
     let settings = document.createElement('div');
@@ -110,66 +111,14 @@ else {
     inputQuantity.value = kanap.quantity;
     settingsQuantity.appendChild(inputQuantity);
 
-    inputQuantity.addEventListener("change", (e) => {
-      e.preventDefault();
-      /*
-      0/ préciser dans le name + ID du produit
-      1. récupère tableauKanap
-      2. findIndex (à la place de find pour récupérer l'index du tableau VS ID du produit avec e.target.name. On recherche l'index grâce à l'ID)  tableauKanap[indexTrouvé].quantity = e.target.value 
-      2bis. e.target.name donne l'ID e.target.value (pour la quantité)
-      
-      */
-
-      let storageQuantity = parseInt(kanap.quantity);
-      console.log('storageQuantity : ', storageQuantity);
-
-      let inputQuantityValue = inputQuantity.value;
-      inputQuantityValue = e.target.value;
-      console.log('localQuantity :', inputQuantityValue);
-
-      let kanapName = kanap.name;
-
-      //2. Conditions d'enregistrement dans le localStorage et si remplies, 
-      //on recherche le produit qui a le même nom et une valeur différente,
-      //on défini alors que la valeur du localStorage sera celle du target / input.
-
-      if (e.target.value > 100 || e.target.value != parseInt(e.target.value)) {
-        alert('Merci de sélectionner un nombre entier entre 1 et 100');
-        e.target.value = kanap.quantity;
-      } else if (e.target.value <= 0) {
-        alert("Merci de sélectionner une quantité supérieur à 0 ou supprimer l'article de votre panier")
-        e.target.value = kanap.quantity;
-      } else {
-        let findResult = tableauKanap.filter((kanap) => e.target.value !== storageQuantity && e.target.name === kanapName);
-        console.log('find', findResult);
-        findResult.quantity = inputQuantityValue;
-        storageQuantity = findResult.quantity;
-        console.log("finalStorage :", storageQuantity);
-
-        //3. j'enregistre dans le localStorage
-        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
-        pPrice.innerHTML = ((parseFloat(res.price) * parseInt(e.target.value)) + ",00 €");
-
-
-        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
-
-        // j'averti de la suppression et recharger la page
-        //window.location.reload();
-
-      }
-    })
-
     let settingsDelete = document.createElement('div');
     settingsDelete.className = 'cart__item__content__settings__delete';
     settings.appendChild(settingsDelete);
-
 
     let pDelete = document.createElement('p');
     pDelete.className = 'deleteItem';
     settingsDelete.appendChild(pDelete);
     pDelete.innerHTML = "Supprimer";
-
-
   }
 }
 
@@ -179,21 +128,32 @@ function changedQuantity(kanap, res) {
     let quantityItemUnit = quantityItem[k];
     let quantityItemID = quantityItemUnit.closest('article').getAttribute("data-id");
     let quantityItemColor = quantityItemUnit.closest('article').getAttribute("data-color");
-
-    quantityItemUnit.addEventListener('click', function () {
+    //let finalSelection = (quantityItemUnit.value);
+    quantityItemUnit.addEventListener('click', function (e) {
       if (localStorage.getItem('listOfProduct')) {
         // permet d'ajouter autant de produit que l'on veut au tableau, si absent, le produit est remplacé par la nouvelle sélection, 
         // soit, on ne peut commander qu'une seule référence
-        tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 
-        foundProduct = tableauKanap.find(quantityItemUnit => quantityItemID == kanap.id && quantityItemColor == kanap.color);
+        //tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+        if (e.target.value > 100 || e.target.value != parseInt(e.target.value)) {
+          alert('Merci de sélectionner un nombre entier entre 1 et 100');
+          e.target.value = kanap.quantity;
+        } else if (e.target.value <= 0) {
+          alert("Merci de sélectionner une quantité supérieur à 0 ou de supprimer l'article de votre panier")
+          e.target.value = kanap.quantity;
+        } else {
 
-        let finalSelection = (quantityItemUnit.value);
-        foundProduct.quantity = finalSelection;
+          foundProduct = tableauKanap.find(quantityItemUnit => quantityItemID == kanap.id && quantityItemColor == kanap.color);
 
-        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
 
-        location.reload()
+          e.target.value = kanap.quantity;
+
+          localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+
+
+        }
+        window.location.reload();
+
 
       }
     })
@@ -204,18 +164,14 @@ function deleteKanap(kanap) {
   const pDelete = document.querySelectorAll('.deleteItem');
   for (let i = 0; i < pDelete.length; i++) {
     let pDeleteUnit = pDelete[i];
-    console.log("pDeleteUnit:", pDeleteUnit);
     tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
-    console.log("tableauKanap:", tableauKanap);
     pDeleteUnit.addEventListener("click", () => {
-      
+
       let deleteId = pDeleteUnit.closest('article').getAttribute('data-id');
       let deleteColor = pDeleteUnit.closest('article').getAttribute('data-color');
-      console.log("deleteId & deleteColor :", deleteId, deleteColor);
       if (localStorage.getItem('listOfProduct')) {
         for (kanap of tableauKanap) {
           findProduct = tableauKanap.filter((kanap) => (deleteId != kanap.id, deleteColor != kanap.color));
-          console.log("findProduct :", findProduct);
           //j'envoie les nouvelles données dans le localStorage
           tableauKanap = findProduct;
           localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
@@ -223,36 +179,177 @@ function deleteKanap(kanap) {
         // j'averti de la suppression et recharger la page
         alert('Votre article a bien été supprimé.');
         window.location.reload();
-        
-      }/*
-      if (productLocalStorage.length == 0) {
-        localStorage.clear(findProduct);
-      }*/
+
+      }
+
     })
+    /*
+                if (productLocalStorage.length == 0) {
+                  localStorage.clear(findProduct);
+                }*/
   }
 }
 
 function totalKanap(res, kanap) {
-  //let quantitySelector = tableauKanap.quantity;
+  //async function updateCartTotal() {
+
   let quantitySelector = document.getElementsByClassName('itemQuantity');
-  if (tableauKanap !== null || inputQuantity.value != kanap.quantity) {
+  let itemAmount = 0;
 
-    let itemAmount = 0;
-    let price = 0;
+  for (let i = 0; i < quantitySelector.length; i++) {
+    //tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+    //for (kanap of tableauKanap) {
+    itemAmount += quantitySelector[i].valueAsNumber;
+  };
 
-    for (let i = 0; i < quantitySelector.length; i++) {
-      itemAmount += quantitySelector[i].valueAsNumber;
-      price += itemAmount * (parseInt(res.price));
-    }
 
-    let totalQuantity = document.getElementById("totalQuantity");
-    totalQuantity.innerHTML = itemAmount;
 
-    let totalPrice = document.getElementById("totalPrice");
-    totalPrice.innerHTML = price;
+  let totalQuantity = document.getElementById("totalQuantity");
+  totalQuantity.innerHTML = itemAmount;
+  //let priceSelector = document.querySelector('.cart__item__content__description p');
+  //console.log("priceSelector :", priceSelector);
+  /*
+  let priceParent = document.querySelector('.cart__item__content__description');
+  console.log("priceParent :", priceParent);
+  let priceChildren = priceParent.childNodes;
+  console.log("priceChildren :", priceChildren);
+
+  let priceChild0 = (priceChildren[0]).innerHTML;
+  console.log("priceChild0:", priceChild0);
+
+  let priceChild2 = (priceChildren[2]).innerHTML;
+  console.log("priceChild2:", priceChild2);
+
+  let finalPrice = priceChild2.slice(0, priceChild2.indexOf(','));
+  console.log('finalPrice',finalPrice);
+
+  let pPriceValue = 0;
+
+if(priceChild0 === res.name){
+  
+  let pPriceValue = finalPrice * itemAmount;
+  console.log("pPriceValue2 :", pPriceValue);
+}
+
+
+  for (let i = 0; i < quantitySelector.length; i++) {
+    let itemId = quantitySelector[i].valueAsNumber;
+    //let kanapId = itemAmount.closest('article').getAttribute('data-id');
+  };
+  const uniqueIds = [];
+
+const unique = tableauKanap.filter(element => {
+  const isDuplicate = uniqueIds.includes(priceChild0);
+
+  if (!isDuplicate) {
+    uniqueIds.push(element.id);
+
+    return true;
   }
 
+  return false;
+});
+console.log("unique :", unique);
+  //if (quantitySelector.length > 0) {
+    let totalPrice =0;
+    tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+    //for (kanap of tableauKanap) {
+      //let pPriceValue = finalPrice * parseInt(kanap.quantity);
+      //console.log("pPriceValue :", pPriceValue, totalPrice);
+
+      //for ( kanap of tableauKanap) { // On récupère le prix des canapés via l'API
+
+      totalPrice += pPriceValue; // On calcule le prix total du panier
+      console.log("totalPrice :", totalPrice);
+      //}
+    //}
+    
+    document.querySelector("#totalPrice").innerHTML = totalPrice; // On affiche le prix total
+  //}
+
+
+
+
+  /*
+    console.log("fullPrice :", fullPrice);
+    for (let i = 0; i < quantitySelector.length; i++) {
+      fullPrice += (itemAmount * res[i].price);
+    }
+    console.log("fullPrice 2:", fullPrice);
+    let totalPrice = document.getElementById("totalPrice");
+    totalPrice.innerHTML = fullPrice;
+    */
+};
+/*
+const getCart = () => {
+  let cart = localStorage.getItem('cart');
+  if(cart == null){
+      return [];
+  }else{
+      return JSON.parse(cart);
+  }
+}*/
+
+
+const getCart = () => {
+  let cart = localStorage.getItem('cart');
+  if (cart == null) {
+    return [];
+  } else {
+    return JSON.parse(cart);
+  }
 }
+
+let totalPrice0 = 0; // Global a passer en tete de js
+function totalPrice(res, kanap) {
+  let kanapColor = kanap.color;
+  let kanapPrice = res.price;
+  let kanapId = res._id;
+
+  //let kanapID = kanap[i];
+
+
+  console.log('kanap', kanap);
+  //for (kanap of tableauKanap) {
+    let prod = tableauKanap.find(el => res._id === el.id);
+    console.log("prod :", prod);
+    /*
+      let prodPrice = tableauKanap.filter(function (el) {
+        return el.id === res._id
+      });
+      
+      console.log("prodPrice :", prodPrice);
+     
+    } */
+
+
+    tableauKanap.reduce((unique, kanapId) => {})
+    //prodPrice = res.price * kanap.id;
+    //console.log("prod.price:", prod.price);
+    let totalPriceNew = (parseInt(res.price) * parseInt(kanap.quantity));
+    totalPrice0 = totalPrice0 + totalPriceNew;
+    console.log("totalPrice0:", totalPrice0);
+    //console.log((res.price).reduce((x, y) => x + y));
+
+  //}
+  let totalPrice = document.getElementById("totalPrice");
+  totalPrice.innerHTML =  totalPrice0;
+  //return totalPrice;
+}
+/*
+function totalPrice() {
+  const cart = getCart()
+  let totalPrice0 = 0;
+  for(let article of cart){
+      let prod = products.find(prod => prod._id === article.productId);
+      totalPrice0 += parseInt(prod.price) * parseInt(article.quantity); 
+  }
+  let totalPrice = document.getElementById("totalPrice");
+  totalPrice.innerHTML = totalPrice0;
+  return totalPrice;
+}
+
+*/
 
 function isCart(kanap) {
   fetch('http://localhost:3000/api/products/' + kanap.id)
@@ -265,7 +362,8 @@ function isCart(kanap) {
       createHTMLContent(res, kanap);
       changedQuantity(res, kanap);
       deleteKanap(kanap);
-      totalKanap(res, kanap);
+      totalKanap(res);
+      totalPrice(res, kanap);
 
     })
     .catch(function (err) {
