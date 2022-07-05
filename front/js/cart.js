@@ -120,7 +120,8 @@ function changedQuantity(kanap) {
       originalQuantity = finalSelection;
 
       localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
-      location.reload()
+      window.location.reload(calcTotalKanap)
+      
     })
   }
 }
@@ -131,8 +132,8 @@ function deleteKanap() {
     let deleteSelector = deleteSelectors[i];
     deleteSelector.addEventListener("click", () => {
 
-      let deleteId = pDeleteUnit.closest('article').getAttribute('data-id');
-      let deleteColor = pDeleteUnit.closest('article').getAttribute('data-color');
+      let deleteId = deleteSelector.closest('article').getAttribute('data-id');
+      let deleteColor = deleteSelector.closest('article').getAttribute('data-color');
 
       filterProduct = tableauKanap.filter((kanap) => (deleteId != kanap.id, deleteColor != kanap.color));
       tableauKanap = filterProduct;
