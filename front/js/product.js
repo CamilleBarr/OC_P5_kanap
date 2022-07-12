@@ -58,7 +58,7 @@ let addToCart2 = (product) => {
             alert('Merci de sélectionner une teinte.')
             return kanap == undefined;
         } else if (kanap.quantity > 100 ||
-            kanap.quantity == 0 ||
+            kanap.quantity <= 0 ||
             kanap.quantity != parseInt(kanap.quantity)) {
             alert("Merci de bien vouloir sélectionner une quantité comprise entre 1 et 100.");
             return kanap == undefined;
