@@ -1,19 +1,4 @@
-/* 
-9. je créé un évènement au clic "confirmation" qui me renvoit sur une autre page (sans ouvrir de nouvel onglet)
-8. suivant demande client : 
-je récupère un tableau des ID du produit + le formulaire de contact qui, se retrouvent dans un object à part 'finalOrderId'
-7. Je récupère les champs et applique les conditions RegExp
-6. je mets des conditions regex au formulaire // OK
-PARTIE 2
-4. je créé un évènement au clic "suppression" du produit - fonctionne le 08/06/22
-4. je créé une condition si doublon de produit
-3. je récupère les données de l'API directement pour le prix, src et text image // fonctionne
-2. j'affiche le localstorage en fonction du contenu / fonctionne
-1. je récupère le localStorage avec lequel je cherche à travailler / fonctionne
-PARTIE 1
-*/
-
-//----PARTIE 1 : affichage panier
+//--------PART 1 : création de l'architecture HTML et récupération de la sélection produit
 
 let tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 
@@ -24,7 +9,6 @@ if (!tableauKanap || tableauKanap == 0) {
   cart__items.appendChild(subtitle1);
 
   let subtitle2 = document.createElement('h2');
-  //subtitle.setAttribute("href=index.html")
   subtitle2.setAttribute('style', 'text-align:center');
   subtitle2.innerHTML = "Avez-vous vu notre page d'accueil ?"
   cart__items.appendChild(subtitle2);
@@ -253,19 +237,13 @@ function postForm() {
   let form = document.querySelector(".cart__order__form");
 
   form.addEventListener("submit", (event) => {
-    //let order = document.getElementById("order").submit();
 
     event.preventDefault();
-
-    // "Requête JSON contenant un objet de contact et un tableau de produits"
 
     let products = [];
     for (kanap of tableauKanap) {
       products.push(kanap.id);
     };
-
-    // "Pour les routes POST, l’objet contact envoyé au serveur doit contenir les champs firstName,
-    // lastName, address, city et email "
 
     let contact = {
       firstName: document.getElementById('firstName').value,
@@ -275,10 +253,6 @@ function postForm() {
       email: document.getElementById('email').value,
     };
 
-    // "Le tableau des produits envoyé au back-end doit être un
-    //array de strings product-ID. Les types de ces champs et leur présence doivent être validés
-    //avant l’envoi des données au serveur."
-
     function orderNumber(min, max) {
       return parseInt(Math.random() * (max - min) + min);
     }
@@ -287,19 +261,15 @@ function postForm() {
     let dataToSend = JSON.stringify({
       "contact": contact,
       "products": products,
-      //"orderNo": orderNo,
     });
     console.log(dataToSend);
 
     fetch("http://localhost:3000/api/products/" + {
         method: 'POST',
         headers: {
-          //accept: "application/json",
           "content-type": "application/json",
         },
         body: dataToSend,
-        //redirect: 'follow',
-        //mode: "cors"})
       })
       .then(res =>
         res.json()
