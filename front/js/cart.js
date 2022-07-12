@@ -180,9 +180,9 @@ function isCart(kanap) {
 
 function getForm() {
 
-  let otherRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
-  let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
-  let addressRegExp = new RegExp("^[0-9]{1,4}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+  let otherRegExp = new RegExp("^[a-zA-Z ,.'-]+{7,30}$");
+  let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{3,30}$');
+  let addressRegExp = new RegExp("^[0-9]{1,4}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+{7,50}$");
 
   let firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
   let lastNameErrorMsg = document.querySelector("#lastNameErrorMsg");
@@ -215,7 +215,7 @@ function getForm() {
     if (otherRegExp.test(city.value)) {
       cityErrorMsg.innerHTML = "";
     } else {
-      cityErrorMsg.innerHTML = "Veuillez retirer les accents";
+      cityErrorMsg.innerHTML = " ";
     }
   })
   document.getElementById("email").addEventListener("change", () => {
