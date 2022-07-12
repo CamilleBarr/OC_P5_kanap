@@ -190,8 +190,6 @@ function getForm() {
   let cityErrorMsg = document.querySelector("#cityErrorMsg");
   let emailErrorMsg = document.querySelector("#emailErrorMsg");
 
-  // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
-
   document.getElementById("firstName").addEventListener("change", () => {
     if (otherRegExp.test(firstName.value)) {
       firstNameErrorMsg.innerHTML = "";
