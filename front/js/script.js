@@ -30,7 +30,6 @@ fetch(url)
 .then(function(products){
     mainFunction(products)
 })
-.catch(function(err)
-{
+.catch(function(err){
     console.log(err, "erreur")
 })
