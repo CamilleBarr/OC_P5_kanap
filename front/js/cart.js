@@ -33,7 +33,7 @@ function createHTMLContent(res, kanap) {
 
   let imageElt = document.createElement('img');
   imageElt.src = res.imageUrl;
-  imageElt.alt = res.description;
+  imageElt.alt = res.altTxt;
   divImage.appendChild(imageElt);
 
   let divContent = document.createElement('div');

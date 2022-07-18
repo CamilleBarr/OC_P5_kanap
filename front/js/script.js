@@ -10,13 +10,13 @@ let mainFunction =(products) => {
         linkElt.appendChild(articleElt);
         let imageElt = document.createElement('img');
         imageElt.src = product.imageUrl;
-        imageElt.alt = product.name;
+        imageElt.alt = product.altText;
         articleElt.appendChild(imageElt); 
         let h3Elt = document.createElement('h3'); 
         h3Elt.innerHTML = product.name;
         articleElt.appendChild(h3Elt); 
         let pElt = document.createElement('p');
-        pElt.innerHTML = product.altTxt;
+        pElt.innerHTML = product.description;
         articleElt.appendChild(pElt); 
     };
 };

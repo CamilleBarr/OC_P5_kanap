@@ -27,7 +27,7 @@ let createHTML = (product) => {
     let imageProduct = document.createElement("img");
     imageClass[0].appendChild(imageProduct);
     imageProduct.src = product.imageUrl;
-    imageProduct.alt = product.name;
+    imageProduct.alt = product.altTxt;
     let h1Product = document.getElementById('title');
     h1Product.innerHTML = product.name;
     let priceProduct = document.getElementById('price');
