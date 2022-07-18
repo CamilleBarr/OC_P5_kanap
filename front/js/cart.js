@@ -173,8 +173,8 @@ function isCart(kanap) {
 //function that summarize contact info given by the user set by our rules and conditions
 function getForm() {
 
-  let otherRegExp = new RegExp("^[a-zA-Z.-_]{2,30}$");
-  let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{3,30}$');
+  let otherRegExp = new RegExp("^[-a-zA-Z ]{1,30}[^0-9]$");
+  let emailRegExp = new RegExp('^[a-zA-Z.-_]{3,30}[@]{1}[a-zA-Z.-_]{3,30}[.]{1}[a-z]{2}[^0-9]$');
   let addressRegExp = new RegExp("^['0-9 A-Za-z-]{2,50}$");
 
   let firstNameErrorMsg = document.querySelector("#firstNameErrorMsg");
@@ -184,38 +184,43 @@ function getForm() {
   let emailErrorMsg = document.querySelector("#emailErrorMsg");
 
   document.getElementById("firstName").addEventListener("change", () => {
-    if (otherRegExp.test(firstName.value)) {
+    if ((otherRegExp.test(firstName.value))==true) {
       firstNameErrorMsg.innerHTML = "";
     } else {
-      firstNameErrorMsg.innerHTML = "Veuillez renseigner votre prénom";
+      firstNameErrorMsg.innerHTML = "Veuillez vérifier l'exactitude de votre saisie";
+      return firstName.value = " ";
     }
   })
   document.getElementById("lastName").addEventListener("change", () => {
-    if (otherRegExp.test(lastName.value)) {
+    if ((otherRegExp.test(lastName.value))==true) {
       lastNameErrorMsg.innerHTML = "";
     } else {
-      lastNameErrorMsg.innerHTML = "Veuillez renseigner votre nom";
+      lastNameErrorMsg.innerHTML = "Veuillez vérifier l'exactitude de votre saisie";
+      return lastName.value = " ";
     }
   })
   document.getElementById("address").addEventListener("change", () => {
-    if (addressRegExp.test(address.value)) {
+    if (addressRegExp.test(address.value)==true) {
       addressErrorMsg.innerHTML = "";
     } else {
       addressErrorMsg.innerHTML = "Veuillez préciser le numéro, type de voie et nom de voie";
+      return address.value = " ";
     }
   })
   document.getElementById("city").addEventListener("change", () => {
-    if (otherRegExp.test(city.value)) {
+    if (otherRegExp.test(city.value)==true) {
       cityErrorMsg.innerHTML = "";
     } else {
-      cityErrorMsg.innerHTML = " Veuillez vérifier l'exactitude de votre saisie";
+      cityErrorMsg.innerHTML = "Veuillez vérifier l'exactitude de votre saisie";
+      return city.value = " ";
     }
   })
   document.getElementById("email").addEventListener("change", () => {
-    if (emailRegExp.test(email.value)) {
+    if (emailRegExp.test(email.value)==true) {
       emailErrorMsg.innerHTML = "";
     } else {
       emailErrorMsg.innerHTML = "Veuillez noter une adresse email valide";
+      return email.value = " ";
     }
   })
 }
