@@ -1,5 +1,6 @@
 var url = 'http://localhost:3000/api/products';
 
+// function displaying the HTML architecture for a product + looping for each product
 let mainFunction =(products) => {
     const sectionElt = document.getElementById("items");
     for (let product of products){

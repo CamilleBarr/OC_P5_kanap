@@ -2,6 +2,7 @@
 let url = 'http://localhost:3000/api/products/';
 let tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 
+
 if (!tableauKanap || tableauKanap == 0) {
   let subtitle1 = document.createElement('h1');
   subtitle1.setAttribute('style', 'text-align:center');
@@ -17,7 +18,7 @@ if (!tableauKanap || tableauKanap == 0) {
     isCart(kanap);
   }
 }
-
+// function displaying the HTML architecture
 function createHTMLContent(res, kanap) {
   let cartSection = document.getElementById('cart__items');
   let cartArticle = document.createElement('article');
@@ -88,6 +89,7 @@ function createHTMLContent(res, kanap) {
   pDelete.innerHTML = "Supprimer";
 }
 
+// function for a change of quantity on click + saving changes
 function changedQuantity(kanap) {
   const quantityItems = document.querySelectorAll('.itemQuantity');
   for (let i = 0; i < quantityItems.length; i++) {
@@ -104,6 +106,7 @@ function changedQuantity(kanap) {
   }
 }
 
+// function on click of delete button + saving changes and reloading page
 function deleteKanap() {
   const deleteSelectors = document.querySelectorAll('.deleteItem');
   for (let i = 0; i < deleteSelectors.length; i++) {
@@ -123,6 +126,7 @@ function deleteKanap() {
   }
 }
 
+//function that calculate the totals of quantity and amount, adjusting if quantity changes or product deleted
 function calcTotalKanap() {
   const quantitySelector = document.getElementsByClassName('itemQuantity');
   let totalQuantity = 0;
@@ -143,6 +147,7 @@ function calcTotalPrice(res, kanap) {
   idTotalPrice.innerHTML = totalPrice;
 }
 
+// global function that summarize all actions possible as a user
 function isCart(kanap) {
   fetch(url + kanap.id)
     .then(function (res) {
@@ -165,6 +170,7 @@ function isCart(kanap) {
 
 //--------PART 2 : récupération du formulaire
 
+//function that summarize contact info given by the user set by our rules and conditions
 function getForm() {
 
   let otherRegExp = new RegExp("^[a-zA-Z.-_]{2,30}$");
@@ -217,6 +223,7 @@ getForm();
 
 // ----- PARTIE 3 : SYNTHESE ET VALIDATION DE COMMANDE
 
+//function that sends contact info + product selection on click and generates an orderId
 function postForm() {
 
   let form = document.querySelector(".cart__order__form");
