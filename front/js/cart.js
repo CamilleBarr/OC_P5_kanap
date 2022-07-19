@@ -1,5 +1,4 @@
 //--------PART 1 : displaying basket
-console.log("test 1")
 let url = "http://localhost:3000/api/products/";
 let tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 
@@ -229,25 +228,16 @@ getForm();
 // ----- PARTIE 3 : Order confirmation
 //function that sends contact info + product selection on click and generates an orderId
 function postForm(res, kanap) {
-  console.log("test 0");
   let form = document.querySelector(".cart__order__form");
-  console.log("form :", form);
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log("test 1");
     if (tableauKanap != null) {
-      //let articleId = document.querySelector('.cart__item').getAttribute('data-id');
-      //console.log("articleId :", articleId);
+      //creating an array of product ID
       let products = [];
-      /*
-      for (let i = 0; i < articleId.length; i++) {
-        products.push(articleId);
-      };
-      */
       for (let listOfProduct of tableauKanap) {
         products.push(listOfProduct.id)
       }
-
+      //creating an object from form values
       let contact = {
         'firstName': document.getElementById('firstName').value,
         'lastName': document.getElementById('lastName').value,
@@ -255,12 +245,14 @@ function postForm(res, kanap) {
         'city': document.getElementById('city').value,
         'email': document.getElementById('email').value,
       };
-
+      // registering in the LS the contact form
       localStorage.setItem("contact", JSON.stringify(contact));
+      //creating an object that recapes form + products selected
       let order = JSON.stringify({
         contact: contact,
         products: products,
       });
+      
       fetch(url + "order", {
           method: 'POST',
           body: order,
