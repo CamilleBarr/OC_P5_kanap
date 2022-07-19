@@ -1,7 +1,7 @@
-//--------PART 1 : création de l'architecture HTML et récupération de la sélection produit
-let url = 'http://localhost:3000/api/products/';
+//--------PART 1 : displaying basket
+console.log("test 1")
+let url = 'http://localhost:3000/api/products';
 let tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
-
 
 if (!tableauKanap || tableauKanap == 0) {
   let subtitle1 = document.createElement('h1');
@@ -149,7 +149,7 @@ function calcTotalPrice(res, kanap) {
 
 // global function that summarize all actions possible as a user
 function isCart(kanap) {
-  fetch(url + kanap.id)
+  fetch(url + "/" + kanap.id)
     .then(function (res) {
       if (res.ok) {
         return res.json()
@@ -168,7 +168,7 @@ function isCart(kanap) {
     })
 };
 
-//--------PART 2 : récupération du formulaire
+//--------PART 2 : formula
 
 //function that summarize contact info given by the user set by our rules and conditions
 function getForm() {
@@ -184,7 +184,7 @@ function getForm() {
   let emailErrorMsg = document.querySelector("#emailErrorMsg");
 
   document.getElementById("firstName").addEventListener("change", () => {
-    if ((otherRegExp.test(firstName.value))==true) {
+    if ((otherRegExp.test(firstName.value)) == true) {
       firstNameErrorMsg.innerHTML = "";
     } else {
       firstNameErrorMsg.innerHTML = "Veuillez vérifier l'exactitude de votre saisie";
@@ -192,7 +192,7 @@ function getForm() {
     }
   })
   document.getElementById("lastName").addEventListener("change", () => {
-    if ((otherRegExp.test(lastName.value))==true) {
+    if ((otherRegExp.test(lastName.value)) == true) {
       lastNameErrorMsg.innerHTML = "";
     } else {
       lastNameErrorMsg.innerHTML = "Veuillez vérifier l'exactitude de votre saisie";
@@ -200,7 +200,7 @@ function getForm() {
     }
   })
   document.getElementById("address").addEventListener("change", () => {
-    if (addressRegExp.test(address.value)==true) {
+    if (addressRegExp.test(address.value) == true) {
       addressErrorMsg.innerHTML = "";
     } else {
       addressErrorMsg.innerHTML = "Veuillez préciser le numéro, type de voie et nom de voie";
@@ -208,7 +208,7 @@ function getForm() {
     }
   })
   document.getElementById("city").addEventListener("change", () => {
-    if (otherRegExp.test(city.value)==true) {
+    if (otherRegExp.test(city.value) == true) {
       cityErrorMsg.innerHTML = "";
     } else {
       cityErrorMsg.innerHTML = "Veuillez vérifier l'exactitude de votre saisie";
@@ -216,7 +216,7 @@ function getForm() {
     }
   })
   document.getElementById("email").addEventListener("change", () => {
-    if (emailRegExp.test(email.value)==true) {
+    if (emailRegExp.test(email.value) == true) {
       emailErrorMsg.innerHTML = "";
     } else {
       emailErrorMsg.innerHTML = "Veuillez noter une adresse email valide";
@@ -226,58 +226,58 @@ function getForm() {
 }
 getForm();
 
-// ----- PARTIE 3 : SYNTHESE ET VALIDATION DE COMMANDE
-
+// ----- PARTIE 3 : Order confirmation
 //function that sends contact info + product selection on click and generates an orderId
-function postForm() {
-
+function postForm(res, kanap) {
+  console.log("test 0");
   let form = document.querySelector(".cart__order__form");
+  console.log("form :", form);
   form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    console.log("test 1");
     if (tableauKanap != null) {
-      event.preventDefault();
-
+      let articleId = document.querySelector('.cart__item').getAttribute('data-id');
+      console.log("articleId :", articleId);
       let products = [];
-      for (let i = 0; i < products.length; i++) {
-        products.push(kanap.id);
+      for (let i = 0; i < articleId.length; i++) {
+        products.push(articleId);
       };
-      let contact = {
-        firstName: document.getElementById('firstName').value,
-        lastName: document.getElementById('lastName').value,
-        address: document.getElementById('address').value,
-        city: document.getElementById('city').value,
-        email: document.getElementById('email').value,
-      };
-
-      let dataToSend = JSON.stringify({
-        "contact": contact,
-        "products": products,
+      let orderId = JSON.stringify({
+        contact: {
+          'firstName': document.getElementById('firstName').value,
+          'lastName': document.getElementById('lastName').value,
+          'address': document.getElementById('address').value,
+          'city': document.getElementById('city').value,
+          'email': document.getElementById('email').value,
+        },
+        products: products,
       });
 
       function orderNumber(min, max) {
         return parseInt(Math.random() * (max - min) + min);
       }
-      let orderNo = orderNumber(1, 10000);
+      let order = orderNumber(1, 10000);
 
-      fetch(url + {
+      fetch(url, {
           method: 'POST',
           headers: {
-            "content-type": "application/json",
+            'Accept': 'application/json',
+            'content-type': 'application/json',
           },
-          body: dataToSend,
+          body: orderId,
         })
         .then(res =>
           res.json()
         )
-        .then(dataToSend => {
-          localStorage.setItem('orderNo', orderNo);
-          let order = JSON.parse(localStorage.getItem('orderNo'));
-          document.location.href = "./confirmation.html?orderNo=" + order;
+        .then(() => {
+          //localStorage.clear();
+          document.location.href = "./confirmation.html?order=" + order;
         })
         .catch(error => console.log('error', error));
     } else {
       alert("Erreur lors de la commande. Merci de vérifier votre panier.");
-    return
-  }
+      return
+    }
   })
 }
 postForm();

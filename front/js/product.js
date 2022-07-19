@@ -1,15 +1,14 @@
 // Affichage d'un produit à la selection par récupération de l'ID d'un produit
-//1. je créer une nouvelle URL
+//1. New URL
 let url = new URL(location.href);
-//2. qui récupère seulement un objet du tableau JSON = un produit
+//2. that only gets one product from our localStorage/JSON
 let productId = url.searchParams.get('productId');
 let kanap = {
     id: productId,
     quantity: quantity.value,
     color: document.getElementById('colors').value
 }
-//3. affichage d'une page avec vue d'un produit
-// fetch avec promesse res = vérifie la bonne récupération des données
+//3. Displaying the page 
 fetch('http://localhost:3000/api/products/' + productId)
     .then(function (res) {
         if (res.ok) {
@@ -17,7 +16,6 @@ fetch('http://localhost:3000/api/products/' + productId)
             return res.json()
         }
     })
-    // promesse / function showProduct permet de créer l'architecture de la fiche produit et y intégrer les données de l'API
     .then(function (product) {
         createHTML(product);
         addToCart2(product)
@@ -40,13 +38,13 @@ let createHTML = (product) => {
     };
     let quantity = document.getElementById('quantity');
 }
-//function addProduct = au click du bouton, 
-//1. je crée un tableau dans lequel j'intègrerai l'objet Kanap.
-//   L'object kanap comprend l'ID, la quantité, la couleur sélectionnée
-//2. J'ajoute des  conditions avant l'ajout du produit au panier (si =0, si >100 etc)
+//function addProduct = on click of button, 
+//1. Creating an arrayin which we add product object
+//   Product object (kanap) contains an ID, the quantity and color selected
+//2. Adding conditions before adding the product in cart e.g.(if =0, if >100 etc)
 let addToCart2 = (product) => {
     let addProduct = document.getElementById('addToCart');
-    // je créé un bloc de code qui s'éxectute au clic du bouton
+    // création d'un bloc de code qui s'éxectute au clic du bouton
     addProduct.addEventListener('click', function () {
         let tableauKanap = [];
         let kanap = {
@@ -64,8 +62,7 @@ let addToCart2 = (product) => {
             return kanap == undefined;
         }
         if (localStorage.getItem('listOfProduct')) {
-            // permet d'ajouter autant de produit que l'on veut au tableau, si absent, le produit est remplacé par la nouvelle sélection, 
-            // soit, on ne peut commander qu'une seule référence
+            // allows adding as much products as we want in the array.
             tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'))
             let foundProduct = tableauKanap.find(el => el.id == kanap.id && el.color == kanap.color);
             console.log("tableauKanap", tableauKanap);
