@@ -1,6 +1,6 @@
 //--------PART 1 : displaying basket
 console.log("test 1")
-let url = 'http://localhost:3000/api/products';
+let url = "http://localhost:3000/api/products/";
 let tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
 
 if (!tableauKanap || tableauKanap == 0) {
@@ -149,7 +149,7 @@ function calcTotalPrice(res, kanap) {
 
 // global function that summarize all actions possible as a user
 function isCart(kanap) {
-  fetch(url + "/" + kanap.id)
+  fetch(url + kanap.id)
     .then(function (res) {
       if (res.ok) {
         return res.json()
@@ -236,42 +236,46 @@ function postForm(res, kanap) {
     event.preventDefault();
     console.log("test 1");
     if (tableauKanap != null) {
-      let articleId = document.querySelector('.cart__item').getAttribute('data-id');
-      console.log("articleId :", articleId);
+      //let articleId = document.querySelector('.cart__item').getAttribute('data-id');
+      //console.log("articleId :", articleId);
       let products = [];
+      /*
       for (let i = 0; i < articleId.length; i++) {
         products.push(articleId);
       };
-      let orderId = JSON.stringify({
-        contact: {
-          'firstName': document.getElementById('firstName').value,
-          'lastName': document.getElementById('lastName').value,
-          'address': document.getElementById('address').value,
-          'city': document.getElementById('city').value,
-          'email': document.getElementById('email').value,
-        },
+      */
+      for (let listOfProduct of tableauKanap) {
+        products.push(listOfProduct.id)
+      }
+
+      let contact = {
+        'firstName': document.getElementById('firstName').value,
+        'lastName': document.getElementById('lastName').value,
+        'address': document.getElementById('address').value,
+        'city': document.getElementById('city').value,
+        'email': document.getElementById('email').value,
+      };
+
+      localStorage.setItem("contact", JSON.stringify(contact));
+      let order = JSON.stringify({
+        contact: contact,
         products: products,
       });
-
-      function orderNumber(min, max) {
-        return parseInt(Math.random() * (max - min) + min);
-      }
-      let order = orderNumber(1, 10000);
-
-      fetch(url, {
+      fetch(url + "order", {
           method: 'POST',
+          body: order,
           headers: {
             'Accept': 'application/json',
             'content-type': 'application/json',
           },
-          body: orderId,
         })
         .then(res =>
           res.json()
         )
-        .then(() => {
+        .then((data) => {
           //localStorage.clear();
-          document.location.href = "./confirmation.html?order=" + order;
+          let orderId = data.orderId;
+          document.location.href = "./confirmation.html?order=" + orderId;
         })
         .catch(error => console.log('error', error));
     } else {
