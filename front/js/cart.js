@@ -268,7 +268,7 @@ function postForm(res, kanap) {
           res.json()
         )
         .then((data) => {
-          //localStorage.clear();
+          localStorage.clear();
           let orderId = data.orderId;
           document.location.href = "./confirmation.html?order=" + orderId;
         })
