@@ -1,14 +1,13 @@
 // Affichage d'un produit à la selection par récupération de l'ID d'un produit
-//1. New URL
+
 let url = new URL(location.href);
-//2. that only gets one product from our localStorage/JSON
 let productId = url.searchParams.get('productId');
-let kanap = {
-    id: productId,
-    quantity: quantity.value,
-    color: document.getElementById('colors').value
+
+//Fn that save/update the LS
+function saveTableauKanap (tableauKanap) {
+    localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
 }
-//3. Displaying the page 
+//3. Displaying the page / Architecture
 fetch('http://localhost:3000/api/products/' + productId)
     .then(function (res) {
         if (res.ok) {
@@ -38,20 +37,20 @@ let createHTML = (product) => {
     };
     let quantity = document.getElementById('quantity');
 }
-//function addProduct = on click of button, 
-//1. Creating an arrayin which we add product object
-//   Product object (kanap) contains an ID, the quantity and color selected
-//2. Adding conditions before adding the product in cart e.g.(if =0, if >100 etc)
+
+//function addToCart = on click of button, 
 let addToCart2 = (product) => {
     let addProduct = document.getElementById('addToCart');
-    // création d'un bloc de code qui s'éxectute au clic du bouton
     addProduct.addEventListener('click', function () {
+        //1. Creating an array in which we add product object
+        //  Product object (kanap) contains an ID, the quantity and color selected
         let tableauKanap = [];
         let kanap = {
             id: productId,
             quantity: document.getElementById('quantity').value,
             color: document.getElementById('colors').value
         }
+        //2. Adding conditions before adding the product in cart e.g.(if =0, if >100 etc)
         if (kanap.color == 0) {
             alert('Merci de sélectionner une teinte.')
             return kanap == undefined;
@@ -65,25 +64,22 @@ let addToCart2 = (product) => {
             // allows adding as much products as we want in the array.
             tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'))
             let foundProduct = tableauKanap.find(el => el.id == kanap.id && el.color == kanap.color);
-            console.log("tableauKanap", tableauKanap);
-            console.log("foundProduct :", foundProduct);
             if (foundProduct != undefined) {
                 let finalSelection = (parseInt(foundProduct.quantity) + parseInt(kanap.quantity));
                 foundProduct.quantity = finalSelection;
-                console.log("finalSelection :", finalSelection);
                 alert("Ce produit a déjà été ajouté. La quantité sélectionnée a été ajouté");
             }
             else {
                 tableauKanap.push(kanap);
                 alert("Votre produit a bien été ajouté au panier");
-                localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+                saveTableauKanap(tableauKanap);
             }
-            localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+            saveTableauKanap(tableauKanap);
         } else {
             tableauKanap.push(kanap);
             alert("Votre produit a bien été ajouté au panier");
         }
-        localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
+        saveTableauKanap(tableauKanap);
     })
     
 
