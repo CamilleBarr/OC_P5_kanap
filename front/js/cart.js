@@ -1,6 +1,7 @@
 //--------PART 1 : displaying basket
 let url = "http://localhost:3000/api/products/";
 let tableauKanap = JSON.parse(localStorage.getItem('listOfProduct'));
+let itemsQuantityInput= document.getElementsByClassName('itemQuantity');
 
 if (!tableauKanap || tableauKanap == 0) {
   let subtitle1 = document.createElement('h1');
@@ -90,15 +91,17 @@ function createHTMLContent(res, kanap) {
 
 // function for a change of quantity on click + saving changes
 function changedQuantity(kanap) {
-  const quantityItems = document.querySelectorAll('.itemQuantity');
-  for (let i = 0; i < quantityItems.length; i++) {
-    quantityItems[i].addEventListener('click', function () {
-      let originalQuantity = kanap.quantity;
-      let changedQuantity = quantityItems[i].valueAsNumber;
-      let findProduct = tableauKanap.find((kanap) => kanap.originalQuantity !== changedQuantity);
+  
+  for (let i = 0; i < itemsQuantityInput.length; i++) {
+    let itemQuantityInput = itemsQuantityInput[i]
+    itemQuantityInput.addEventListener('click', () => {
+
+      let IdOfQuantitysArticle = itemQuantityInput.closest('article').getAttribute('data-id');
+      let changedQuantity = itemQuantityInput.valueAsNumber;
+      let findProduct = tableauKanap.find((kanap) => kanap.id==IdOfQuantitysArticle, kanap.originalQuantity !== changedQuantity);
       findProduct.quantity = changedQuantity;
-      let finalSelection = changedQuantity;
-      originalQuantity = finalSelection;
+      
+      originalQuantity = changedQuantity;
       localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
       window.location.reload(calcTotalKanap)
     })
@@ -125,12 +128,12 @@ function deleteKanap() {
   }
 }
 
+
 //function that calculate the totals of quantity and amount, adjusting if quantity changes or product deleted
 function calcTotalKanap() {
-  const quantitySelector = document.getElementsByClassName('itemQuantity');
   let totalQuantity = 0;
-  for (let i = 0; i < quantitySelector.length; i++) {
-    totalQuantity += quantitySelector[i].valueAsNumber;
+  for (let i = 0; i < itemsQuantityInput.length; i++) {
+    totalQuantity += itemsQuantityInput[i].valueAsNumber;
   };
   let idTotalQuantity = document.getElementById("totalQuantity");
   idTotalQuantity.innerHTML = totalQuantity;
