@@ -94,16 +94,24 @@ function changedQuantity(kanap) {
   
   for (let i = 0; i < itemsQuantityInput.length; i++) {
     let itemQuantityInput = itemsQuantityInput[i]
-    itemQuantityInput.addEventListener('click', () => {
+    itemQuantityInput.addEventListener('change', () => {
 
       let IdOfQuantitysArticle = itemQuantityInput.closest('article').getAttribute('data-id');
+      let ColorOfQuantitysArticle = itemQuantityInput.closest('article').getAttribute('data-color');
       let changedQuantity = itemQuantityInput.valueAsNumber;
-      let findProduct = tableauKanap.find((kanap) => kanap.id==IdOfQuantitysArticle, kanap.originalQuantity !== changedQuantity);
+      let findProduct = tableauKanap.find((kanap) => kanap.id==IdOfQuantitysArticle && kanap.originalQuantity !== changedQuantity && kanap.color==ColorOfQuantitysArticle);
       findProduct.quantity = changedQuantity;
       
       originalQuantity = changedQuantity;
+      if (changedQuantity> 100 ||
+        changedQuantity <= 0 ||
+        changedQuantity != parseInt(changedQuantity)) {
+              alert("Merci de bien vouloir sélectionner une quantité comprise entre 1 et 100.");
+              return changedQuantity == undefined;
+          } 
       localStorage.setItem('listOfProduct', JSON.stringify(tableauKanap));
       window.location.reload(calcTotalKanap)
+   
     })
   }
 }
