@@ -1,5 +1,5 @@
 # Kanap #
-https://camillebarr.github.io/COC_P5_kanap/index.html
+https://camillebarr.github.io/COC_P5_kanap/front/index.html
 
 This is the front end and back end server for Project 5 of the Web Developer path.
 
